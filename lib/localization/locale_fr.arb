@@ -1,0 +1,36 @@
+
+{
+    "groupAndSection": "Groupe et Sections",
+    "examsPlanning": "Planning des examens",
+    "examsResults": "Résultats des examens",
+    "evaluations": "Évaluations",
+    "scholarDebt": "Dette scolaire",
+    "subscriptions": "Abonnements",
+    "home": "Accueil",
+    "payement": "Paiement",
+    "profile": "Profil",
+    "logout": "Déconnexion",
+    "login": "Connexion",
+    "academicVacation": "Vacances académiques",
+    "bacInfo": "Informations BAC",
+    "notesRegister": "Releve de notes",
+    "firstAndLastname": "Nom et Prénom",
+    "changePassword" : "Changer le mot de passe",
+    "birthPlace": "Lieu de naissance",
+    "birthDate" : "Date de naissance",
+    "changeLanguage" : "Changer la langue",
+    "changeTheme" : "Changer le thème",
+    "confirm" : "Confirmer",
+    "cancel" : "Annuler",
+    "settings" : "Paramètres",
+    "arabic" : "Arabe",
+    "french" : "Français",
+    "english" : "Anglais",
+    "darkTheme" : "Thème sombre",
+    "lightTheme" : "Thème clair",
+    "theme" : "Thème",
+    "language" : "Langue"
+
+
+
+}

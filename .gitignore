@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/release
 
 /assets/credentials/
+
+*.l10n.json
+.metadata
+pubspec.lock

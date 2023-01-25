@@ -14,3 +14,4 @@ const academiqueVacationsRoute = '/academiqueVacations';
 const creditsRoute = '/credits';
 const scholarDebtsRoute = '/scholarDebts';
 const payementRoute = '/payement';
+const notesRegisterRoute = '/notesRegister';

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'service.dart';
 
-
 class SettingsController with ChangeNotifier {
   static SettingsController? _instance;
 
@@ -20,8 +19,7 @@ class SettingsController with ChangeNotifier {
   late ThemeMode _themeMode;
   late LanguageMode _languageMode;
 
-  Locale _locale = const Locale('en');
-
+  Locale _locale = const Locale('fr');
 
   ThemeMode get themeMode => _themeMode;
 
@@ -46,7 +44,6 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateThemeMode(newThemeMode);
   }
 
-
   Future<void> updateLanguageMode(LanguageMode? newLanguageMode) async {
     if (newLanguageMode == null) return;
 
@@ -57,20 +54,19 @@ class SettingsController with ChangeNotifier {
         _locale = const Locale('en');
         break;
       case LanguageMode.french:
-        _locale =const Locale('fr');
+        _locale = const Locale('fr');
         break;
       case LanguageMode.arabic:
-        _locale =const Locale('ar');
+        _locale = const Locale('ar');
         break;
     }
 
     _languageMode = newLanguageMode;
 
-     notifyListeners();
+    notifyListeners();
 
     await _settingsService.updateLanguageMode(newLanguageMode);
   }
 }
 
-
-enum LanguageMode { english, french,arabic }
+enum LanguageMode { english, french, arabic }

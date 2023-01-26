@@ -13,6 +13,7 @@ class LoginLogic {
 
 
   void connect(){
+    AppNavigator.pushNamedReplacement(dashboardRoute);
     if(formKey.currentState!.validate()){
       
     }

@@ -36,5 +36,6 @@
     "passwordRequired": "Password is required",
     "wrongUsernameOrPassword": "Wrong username or password",
     "loginFailed": "Login failed",
-    "usernameInvalid": "Invalid username"
+    "usernameInvalid": "Invalid username",
+    "unavailable": "Unavailable"
 }

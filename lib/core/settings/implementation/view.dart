@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progresswebtu/constants/measures.dart';
 
 import 'controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,7 +20,7 @@ class SettingsView extends StatelessWidget {
         title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(AppMeasures.bodyPaddingsMeduim),
         // Glue the SettingsController to the theme selection DropdownButton.
         //
         // When a user selects a theme from the dropdown list, the

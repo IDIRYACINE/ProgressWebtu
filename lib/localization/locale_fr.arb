@@ -37,7 +37,9 @@
     "passwordRequired": "Mot de passe obligatoire",
     "wrongUsernameOrPassword": "Nom d'utilisateur ou mot de passe incorrect",
     "loginFailed": "Échec de la connexion",
-    "usernameInvalid": "Nom d'utilisateur invalide"
+    "usernameInvalid": "Nom d'utilisateur invalide",
+    "unavailable": "Indisponible"
+
 
 
 

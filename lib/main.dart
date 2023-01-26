@@ -43,6 +43,8 @@ class MyApp extends StatelessWidget {
                 Locale("ar")
               ],
               onGenerateRoute: AppRouter.generateRoutes,
+              locale: settingsController.locale,
+              initialRoute: loadingRoute,
             );
           }),
     );

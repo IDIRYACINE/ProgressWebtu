@@ -5,7 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progresswebtu/core/home/implementation/view.dart';
 import 'package:progresswebtu/core/login/feature.dart';
+import 'package:progresswebtu/core/settings/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
+import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
 import 'routes.dart';
 
 abstract class AppRouter {
@@ -23,12 +25,23 @@ abstract class AppRouter {
           settings: settings,
           view: LoginView(),
         );  
-     
+
+      case settingsRoute:
+        return getPageRoute(
+          settings: settings,
+          view:  SettingsView(controller: SettingsController.instance,),
+        );  
+
+      case loadingRoute:
+        return getPageRoute(
+          settings: settings,
+          view:  SplashView(settings:settings),
+        );
         
       default:
         return getPageRoute(
           settings: settings,
-          view:  SplashView(settings:settings),
+          view:  const NotAvaillableView(),
         );
     }
   }

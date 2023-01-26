@@ -27,26 +27,20 @@ class LoginView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Image.asset(AppMetadata.progressBannerAsset),
-                ColoredBox(
-                  color: theme.backgroundColor,
-                  child: LoginTextForm(
-                      inputLabel: AppLocalizations.of(context)!.username,
-                      icon: Icons.email,
-                      validator: (value) => validateUsername(value, context),
-                      hintEnabled: true,
-                      onHintPressed: () => logic.displayUsernameHint(context),
-                      onChanged: logic.setUsername),
-                ),
-                ColoredBox(
-                  color: theme.backgroundColor,
-                  child: LoginTextForm(
-                    inputLabel: AppLocalizations.of(context)!.password,
-                    icon: Icons.lock,
-                    validator: (value) => validatePassword(value, context),
+                LoginTextForm(
+                    inputLabel: AppLocalizations.of(context)!.username,
+                    icon: Icons.email,
+                    validator: (value) => validateUsername(value, context),
                     hintEnabled: true,
-                    onHintPressed: () => logic.displayPasswordHint(context),
-                    onChanged: logic.setPassword,
-                  ),
+                    onHintPressed: () => logic.displayUsernameHint(context),
+                    onChanged: logic.setUsername),
+                LoginTextForm(
+                  inputLabel: AppLocalizations.of(context)!.password,
+                  icon: Icons.lock,
+                  validator: (value) => validatePassword(value, context),
+                  hintEnabled: true,
+                  onHintPressed: () => logic.displayPasswordHint(context),
+                  onChanged: logic.setPassword,
                 ),
                 ConnectButton(onPressed: () => logic.connect())
               ],

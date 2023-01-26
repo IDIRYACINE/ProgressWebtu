@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -8,10 +7,10 @@ import 'package:progresswebtu/core/login/feature.dart';
 import 'package:progresswebtu/core/settings/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
 import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
+import 'package:progresswebtu/features/bac/feature.dart';
 import 'routes.dart';
 
 abstract class AppRouter {
-
   static Route<dynamic> generateRoutes(RouteSettings settings) {
     switch (settings.name) {
       case dashboardRoute:
@@ -24,24 +23,32 @@ abstract class AppRouter {
         return getPageRoute(
           settings: settings,
           view: LoginView(),
-        );  
+        );
 
       case settingsRoute:
         return getPageRoute(
           settings: settings,
-          view:  SettingsView(controller: SettingsController.instance,),
-        );  
+          view: SettingsView(
+            controller: SettingsController.instance,
+          ),
+        );
+
+      case bacRoute:
+        return getPageRoute(
+          settings: settings,
+          view: const BacInformationsView(),
+        );
 
       case loadingRoute:
         return getPageRoute(
           settings: settings,
-          view:  SplashView(settings:settings),
+          view: SplashView(settings: settings),
         );
-        
+
       default:
         return getPageRoute(
           settings: settings,
-          view:  const NotAvaillableView(),
+          view: const NotAvaillableView(),
         );
     }
   }
@@ -55,5 +62,3 @@ abstract class AppRouter {
         : MaterialPageRoute(settings: settings, builder: (_) => view);
   }
 }
-
-

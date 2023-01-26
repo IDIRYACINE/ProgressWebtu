@@ -37,11 +37,14 @@ class LoginTextForm extends StatelessWidget {
 
     return TextFormField(
       decoration: InputDecoration(
+        fillColor: Theme.of(context).backgroundColor,
+        filled: true,
           border: const OutlineInputBorder(),
           labelText: inputLabel,
           prefixIcon: inputPrefix,
           suffixIcon: hintSuffix),
       validator: validator,
+      onChanged: onChanged,
     );
   }
 }

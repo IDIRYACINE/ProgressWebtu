@@ -1,13 +1,59 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:progresswebtu/constants/measures.dart';
+import 'package:progresswebtu/constants/metadata.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:progresswebtu/core/login/implementation/logic.dart';
+import 'package:progresswebtu/utility/localized_validators.dart';
+import 'package:progresswebtu/widgets/buttons.dart';
+import 'package:progresswebtu/widgets/forms.dart';
 
-class AuthWrapper extends StatelessWidget{
-  const AuthWrapper({super.key});
+class LoginView extends StatelessWidget {
+  LoginView({super.key});
+
+  final LoginLogic logic = LoginLogic();
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final ThemeData theme = Theme.of(context);
+
+    return Material(
+      child: Container(
+        color: theme.scaffoldBackgroundColor,
+        child: Form(
+          key: logic.formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(AppMeasures.bodyPaddings),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Image.asset(AppMetadata.progressBannerAsset),
+                ColoredBox(
+                  color: theme.backgroundColor,
+                  child: LoginTextForm(
+                      inputLabel: AppLocalizations.of(context)!.username,
+                      icon: Icons.email,
+                      validator: (value) => validateUsername(value, context),
+                      hintEnabled: true,
+                      onHintPressed: () => logic.displayUsernameHint(context),
+                      onChanged: logic.setUsername),
+                ),
+                ColoredBox(
+                  color: theme.backgroundColor,
+                  child: LoginTextForm(
+                    inputLabel: AppLocalizations.of(context)!.password,
+                    icon: Icons.lock,
+                    validator: (value) => validatePassword(value, context),
+                    hintEnabled: true,
+                    onHintPressed: () => logic.displayPasswordHint(context),
+                    onChanged: logic.setPassword,
+                  ),
+                ),
+                ConnectButton(onPressed: () => logic.connect())
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

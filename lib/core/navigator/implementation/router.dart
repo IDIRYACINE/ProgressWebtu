@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progresswebtu/core/home/implementation/view.dart';
+import 'package:progresswebtu/core/login/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
 import 'routes.dart';
 
@@ -16,6 +17,12 @@ abstract class AppRouter {
           settings: settings,
           view: const HomeView(),
         );
+
+      case loginRoute:
+        return getPageRoute(
+          settings: settings,
+          view: LoginView(),
+        );  
      
         
       default:

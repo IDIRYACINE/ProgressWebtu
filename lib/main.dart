@@ -4,8 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:progresswebtu/constants/metadata.dart';
 import 'package:progresswebtu/constants/themes.dart';
 import 'package:progresswebtu/core/navigator/feature.dart';
-
-import 'core/login/feature.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'core/settings/feature.dart';
 
 void main() {
@@ -26,23 +25,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BinderScope(
       child: AnimatedBuilder(
-      animation: settingsController,
-      builder: (BuildContext context, Widget? child) {
-          return MaterialApp(
-            navigatorKey: AppNavigator.key,
-            title: Metadata.appName,
-            theme: AppThemes.lightTheme,
-            localizationsDelegates: const [
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [Locale('en'), Locale('fr'), Locale("ar")],
-            onGenerateRoute: AppRouter.generateRoutes,
-            home: const AuthWrapper(),
-          );
-        }
-      ),
+          animation: settingsController,
+          builder: (BuildContext context, Widget? child) {
+            return MaterialApp(
+              navigatorKey: AppNavigator.key,
+              title: AppMetadata.appName,
+              theme: AppThemes.lightTheme,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale('fr'),
+                Locale('en'),
+                Locale("ar")
+              ],
+              onGenerateRoute: AppRouter.generateRoutes,
+            );
+          }),
     );
   }
 }

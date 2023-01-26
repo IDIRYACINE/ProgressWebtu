@@ -28,5 +28,13 @@
     "darkTheme": "Dark Theme",
     "lightTheme": "Light Theme",
     "theme": "Theme",
-    "language": "Language"
+    "language": "Language",
+    "username": "Username",
+    "password": "Password",
+    "passwordTooShort": "Password is too short",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "wrongUsernameOrPassword": "Wrong username or password",
+    "loginFailed": "Login failed",
+    "usernameInvalid": "Invalid username"
 }

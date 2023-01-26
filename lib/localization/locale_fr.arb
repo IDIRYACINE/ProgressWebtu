@@ -29,7 +29,15 @@
     "darkTheme" : "Thème sombre",
     "lightTheme" : "Thème clair",
     "theme" : "Thème",
-    "language" : "Langue"
+    "language" : "Langue",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "passwordTooShort": "Mot de passe trop court",
+    "usernameRequired": "Nom d'utilisateur obligatoire",
+    "passwordRequired": "Mot de passe obligatoire",
+    "wrongUsernameOrPassword": "Nom d'utilisateur ou mot de passe incorrect",
+    "loginFailed": "Échec de la connexion",
+    "usernameInvalid": "Nom d'utilisateur invalide"
 
 
 

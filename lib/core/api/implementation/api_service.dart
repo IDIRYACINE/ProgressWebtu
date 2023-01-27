@@ -1,79 +1,53 @@
-import 'dart:convert';
-
-import 'package:flutter/scheduler.dart';
+import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:http/http.dart' as http;
-import 'package:progresswebtu/core/api/types.dart';
-import 'package:progresswebtu/core/api/utility/parser.dart';
-import 'api_responses.dart';
-import 'apis.dart';
 
-class ApiService {
-  static final ApiService _instance = ApiService._internal();
-  static String _authKey = "";
+class ApiService extends Service {
+  static ApiService? _instance;
+  final http.Client client = http.Client();
 
-  static String _username = "";
-  static String _bacYear = "";
 
-  ApiService._internal();
+  ApiService._internal(super.searchAlgorithm);
 
   factory ApiService.instance() {
-    return _instance;
+    if (_instance == null) {
+      BinarySearchAlgorithm<Command, int> searchAlgorithm =
+          _createSearchAlgorithm();
+
+      _instance = ApiService._internal(searchAlgorithm);
+      _instance!._registerDefaultCommands();
+    }
+
+    return _instance!;
   }
 
-  final http.Client _client = http.Client();
+  static BinarySearchAlgorithm<Command, int> _createSearchAlgorithm() {
+    BinarySearchComparator<Command, int> comparator = BinarySearchComparator(
+        isGreaterThan: (Command command, int target) =>
+            command.commandId > target,
+        isLessThan: (Command command, int target) =>
+            command.commandId < target);
 
-  Future<void> login(String username, String password,
-      {required OnLoginSuccess onSucess, required VoidCallback onFail}) async {
-    Api api = AuthenticateApi();
+    BinarySearchAlgorithm<Command, int> searchAlgorithm =
+        BinarySearchAlgorithm(comparator);
 
-    Uri url = Uri.https(host, api.url);
-
-    Map<String, Object> body = {"username": username, "password": password};
-    Map<String, String> headers = {"Content-Type": "application/json"};
-
-    _client
-        .post(url, body: jsonEncode(body), headers: headers)
-        .then((response) {
-      try {
-        final decodedResponse =
-            jsonDecode(response.body) as Map<String, dynamic>;
-        AuthResponse authResponse = AuthResponse.fromJson(decodedResponse);
-        _authKey = authResponse.token;
-
-        _username = parseBacNumberFromUsername(username);
-        _bacYear = parseBacYearFromUsername(username);
-
-        onSucess(authResponse);
-      } catch (e) {
-
-        onFail();
-      }
-    });
+    return searchAlgorithm;
   }
 
-  Future<void> logout() async {
-    _client.close();
+  void _registerDefaultCommands() {}
+
+  @override
+  void onEvent(ServiceEvent event) {
+    Command? command = searchAlgorithm.search(commands, event.eventId);
+    if (command != null) {
+      command.handleEvent(event.eventData);
+    }
   }
 
-  Future<BacSummary?> getBacSummary() async {
-    Api api = BacSummaryApi();
-
-    String apiUrl = api.url.replaceAll(usernameToken, _username);
-    apiUrl = apiUrl.replaceAll(bacYearToken, _bacYear);
-
-    Uri url = Uri.https(host, apiUrl);
-
-    final headers = {"authorization": _authKey};
-
-    return _client.get(url, headers: headers).then((response) {
-      try {
-        final decodedResponse =
-            jsonDecode(response.body) as Map<String, dynamic>;
-        BacSummary bacSummary = BacSummary.fromJson(decodedResponse);
-        return bacSummary;
-      } catch (e) {
-        return null;
-      }
-    });
+  @override
+  void onRawEvent(RawServiceEventData event) {
+     Command? command = searchAlgorithm.search(commands, event.eventId);
+    if (command != null) {
+      command.handleRawEvent(event);
+    }
   }
 }

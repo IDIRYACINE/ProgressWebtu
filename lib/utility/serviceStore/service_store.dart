@@ -27,16 +27,15 @@ abstract class ServiceStore {
 }
 
 abstract class Service {
-  final int serviceId;
-  final String serviceName;
+  late int serviceId;
+  late String serviceName;
   late Stream stream;
 
   late List<Command> commands;
 
-    final SearchAlgorithm<Command, int, Comparator> _searchAlgorithm;
+  final SearchAlgorithm<Command, int, Comparator> searchAlgorithm;
 
-
-  Service(this.serviceId, this.serviceName, this._searchAlgorithm);
+  Service(this.searchAlgorithm);
 
   void registerCommand(Command command) {
     commands.add(command);
@@ -47,7 +46,7 @@ abstract class Service {
   }
 
   void unregisterCommandById(int commandId) {
-    Command? command = _searchAlgorithm.search(commands, commandId);
+    Command? command = searchAlgorithm.search(commands, commandId);
     if (command != null) {
       commands.remove(command);
     }
@@ -57,15 +56,14 @@ abstract class Service {
   void onRawEvent(RawServiceEventData event);
 }
 
-
-abstract class Command{
+abstract class Command<A extends ServiceEventData ,B extends RawServiceEventData ,O extends ServiceEventResponse> {
   final int commandId;
   final String commandName;
 
   Command(this.commandId, this.commandName);
 
-  ServiceEventResponse execute(ServiceEventData eventData);
-
+  Future<O> handleEvent(A eventData);
+  Future<O> handleRawEvent(B eventData);
 }
 
 abstract class ServiceEvent {
@@ -85,12 +83,12 @@ abstract class ServiceEvent {
   });
 }
 
-abstract class ServiceEventData {
+abstract class ServiceEventData<T extends RawServiceEventData> {
   final String requesterId;
 
   ServiceEventData(this.requesterId);
 
-  RawServiceEventData toRawServiceEventData(int messageId);
+  T toRawServiceEventData(int messageId);
 }
 
 abstract class RawServiceEventData {
@@ -98,11 +96,17 @@ abstract class RawServiceEventData {
   final int messageId;
   final int eventId;
 
-  RawServiceEventData(this.requesterId, this.messageId, this.eventId);
+  RawServiceEventData(this.messageId,this.requesterId, this.eventId);
+}
+
+enum ServiceEventResponseStatus {
+  success,
+  error,
 }
 
 abstract class ServiceEventResponse {
   final int messageId;
+  final ServiceEventResponseStatus responseType;
 
-  ServiceEventResponse(this.messageId);
+  ServiceEventResponse(this.messageId, this.responseType);
 }

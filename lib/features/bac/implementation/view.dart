@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:progresswebtu/core/api/implementation/api_responses.dart';
-import 'package:progresswebtu/core/api/implementation/api_service.dart';
+import 'package:progresswebtu/core/api/feature.dart';
 import 'logic.dart';
 
 class BacInformationsView extends StatefulWidget {
@@ -13,12 +12,13 @@ class BacInformationsView extends StatefulWidget {
 class BacInformationsViewState extends State<BacInformationsView> {
   final logic = BacViewLogic();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: FutureBuilder(
-          future: ApiService.instance().getBacSummary(),
+          future: logic.loadBacSummary(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data != null) {

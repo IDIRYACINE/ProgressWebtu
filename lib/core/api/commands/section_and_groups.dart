@@ -3,23 +3,20 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
-class SectionsAndGroupsCommand extends Command<SectionsEventData,
-    SectionsRawEventData, SectionsResponse> {
-  static final int id = Apis.sectionAndGroups.index;
-  static final String name = Apis.sectionAndGroups.name;
+final int sectionEventId = Apis.sectionAndGroups.index;
+final String sectionEventName = Apis.sectionAndGroups.name;
 
-  SectionsAndGroupsCommand() : super(id, name);
+class SectionsAndGroupsCommand
+    extends Command<SectionsEventData, SectionsRawEventData, SectionsResponse> {
+  SectionsAndGroupsCommand() : super(sectionEventId, sectionEventName);
 
   @override
-  Future<SectionsResponse> handleEvent(
-      SectionsEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+  Future<SectionsResponse> handleEvent(SectionsEventData eventData) {
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
-  Future<SectionsResponse> handleRawEvent(
-      SectionsRawEventData eventData) {
+  Future<SectionsResponse> handleRawEvent(SectionsRawEventData eventData) {
     Api api = SectionsAndGroupsApi();
 
     String apiUrl = api.url.replaceAll(usernameToken, eventData.username);
@@ -40,7 +37,8 @@ class SectionsAndGroupsCommand extends Command<SectionsEventData,
             .toList();
 
         return SectionsResponse(
-                messageId: eventData.messageId, sections: sections);;
+            messageId: eventData.messageId, sections: sections);
+        
       } catch (e) {
         return SectionsResponse(
             status: ServiceEventResponseStatus.error,
@@ -50,9 +48,7 @@ class SectionsAndGroupsCommand extends Command<SectionsEventData,
   }
 }
 
-class SectionsEventData
-    extends ServiceEventData<SectionsRawEventData> {
-  final int messageId;
+class SectionsEventData extends ServiceEventData<SectionsRawEventData> {
   final String username;
 
   final String bacYear;
@@ -62,12 +58,11 @@ class SectionsEventData
     required this.username,
     required this.bacYear,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  SectionsRawEventData toRawServiceEventData(int messageId) {
+  SectionsRawEventData toRawServiceEventData( ) {
     return SectionsRawEventData(
         authKey: authKey,
         bacYear: bacYear,
@@ -146,4 +141,8 @@ class Section {
       periodeLibelleLongLt: json[SectionKey.periodeLibelleLongLt.name],
     );
   }
+}
+
+class GroupSectionEvent extends ServiceEvent<SectionsResponse> {
+  GroupSectionEvent({required super.eventData,super.callback}) : super(sectionEventId, sectionEventName, serviceId);
 }

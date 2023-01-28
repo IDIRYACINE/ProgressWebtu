@@ -1,21 +1,18 @@
-
-
 import 'dart:convert';
 
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
-class BacSummaryCommand extends Command<BacNotesEventData,
-    BacNotesRawEventData, BacNotesResponse> {
-  static final int id = Apis.bacResults.index;
-  static final String name = Apis.bacResults.name;
+final int bacNotesEventId = Apis.bacResults.index;
+final String bacNotesEventName = Apis.bacResults.name;
 
-  BacSummaryCommand() : super(id, name);
+class BacSummaryCommand
+    extends Command<BacNotesEventData, BacNotesRawEventData, BacNotesResponse> {
+  BacSummaryCommand() : super(bacNotesEventId, bacNotesEventName);
 
   @override
   Future<BacNotesResponse> handleEvent(BacNotesEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
@@ -28,14 +25,18 @@ class BacSummaryCommand extends Command<BacNotesEventData,
     Uri url = Uri.https(host, apiUrl);
 
     final headers = {"authorization": eventData.authKey};
-   
-    return  ApiService.instance().client.get(url, headers: headers).then((response) {
+
+    return ApiService.instance()
+        .client
+        .get(url, headers: headers)
+        .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
         List<BacNote> bacNotes = decodedResponse
             .map((e) => BacNote.fromJson(e as Map<String, dynamic>))
             .toList();
-        BacNotesResponse bacNotesResponse = BacNotesResponse(messageId: eventData.messageId, bacNotes: bacNotes);
+        BacNotesResponse bacNotesResponse = BacNotesResponse(
+            messageId: eventData.messageId, bacNotes: bacNotes);
         return bacNotesResponse;
       } catch (e) {
         return BacNotesResponse(
@@ -43,11 +44,10 @@ class BacSummaryCommand extends Command<BacNotesEventData,
             messageId: eventData.messageId);
       }
     });
-}
+  }
 }
 
 class BacNotesEventData extends ServiceEventData<BacNotesRawEventData> {
-  final int messageId;
   final String username;
 
   final String bacYear;
@@ -57,12 +57,11 @@ class BacNotesEventData extends ServiceEventData<BacNotesRawEventData> {
     required this.username,
     required this.bacYear,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  BacNotesRawEventData toRawServiceEventData(int messageId) {
+  BacNotesRawEventData toRawServiceEventData() {
     return BacNotesRawEventData(
         authKey: authKey,
         bacYear: bacYear,
@@ -118,4 +117,8 @@ class BacNote {
       refCodeMatiere: json[BacNoteKey.refCodeMatiere.name],
     );
   }
+}
+
+class BacNotesEvent extends ServiceEvent<BacNotesResponse>{
+  BacNotesEvent({required super.eventData,super.callback}) : super(bacNotesEventId, bacNotesEventName, serviceId);
 }

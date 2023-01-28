@@ -3,27 +3,23 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int examNotesEventId = Apis.examsResults.index;
+final String examNotesEventName = Apis.examsResults.name;
+
 class ExamNotesCommand extends Command<ExamNotesEventData,
     ExamNotesRawEventData, ExamNotesResponse> {
-  static final int id = Apis.examsResults.index;
-  static final String name = Apis.examsResults.name;
-
-  ExamNotesCommand() : super(id, name);
+  ExamNotesCommand() : super(examNotesEventId, examNotesEventName);
 
   @override
-  Future<ExamNotesResponse> handleEvent(
-      ExamNotesEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+  Future<ExamNotesResponse> handleEvent(ExamNotesEventData eventData) {
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
-  Future<ExamNotesResponse> handleRawEvent(
-      ExamNotesRawEventData eventData) {
+  Future<ExamNotesResponse> handleRawEvent(ExamNotesRawEventData eventData) {
     Api api = ExamsNotesApi();
 
-       String apiUrl = api.url.replaceAll(studentIdToken, eventData.studentId);
-
+    String apiUrl = api.url.replaceAll(studentIdToken, eventData.studentId);
 
     Uri url = Uri.https(host, apiUrl);
 
@@ -35,12 +31,12 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
-         List<ExamNote> examNotes = decodedResponse
+        List<ExamNote> examNotes = decodedResponse
             .map((e) => ExamNote.fromJson(e as Map<String, dynamic>))
             .toList();
-            
+
         return ExamNotesResponse(
-                messageId: eventData.messageId, examNotes: examNotes);
+            messageId: eventData.messageId, examNotes: examNotes);
       } catch (e) {
         return ExamNotesResponse(
             status: ServiceEventResponseStatus.error,
@@ -50,22 +46,18 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
   }
 }
 
-class ExamNotesEventData
-    extends ServiceEventData<ExamNotesRawEventData> {
-  final int messageId;
+class ExamNotesEventData extends ServiceEventData<ExamNotesRawEventData> {
   final String studyLevel;
-
 
   final String authKey;
   ExamNotesEventData({
     required this.studyLevel,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  ExamNotesRawEventData toRawServiceEventData(int messageId) {
+  ExamNotesRawEventData toRawServiceEventData( ) {
     return ExamNotesRawEventData(
         authKey: authKey,
         studentId: studyLevel,
@@ -76,7 +68,6 @@ class ExamNotesEventData
 
 class ExamNotesRawEventData extends RawServiceEventData {
   final String studentId;
-
 
   final String authKey;
 
@@ -208,7 +199,8 @@ class ExamNote {
       oldCopieNonRemise: json[ExamNoteKey.oldCopieNonRemise.name],
       planningSessionId: json[ExamNoteKey.planningSessionId.name],
       planningSessionIntitule: json[ExamNoteKey.planningSessionIntitule.name],
-      rattachementMcCoefficient: json[ExamNoteKey.rattachementMcCoefficient.name],
+      rattachementMcCoefficient:
+          json[ExamNoteKey.rattachementMcCoefficient.name],
       rattachementMcCredit: json[ExamNoteKey.rattachementMcCredit.name],
       rattachementMcId: json[ExamNoteKey.rattachementMcId.name],
       readerByJury: json[ExamNoteKey.readerByJury.name],
@@ -218,4 +210,9 @@ class ExamNote {
       ueNatureLlFr: json[ExamNoteKey.ueNatureLlFr.name],
     );
   }
+}
+
+
+class ExamNotesEvent extends ServiceEvent<ExamNotesResponse>{
+  ExamNotesEvent( {required super.eventData,super.callback}) : super(examNotesEventId, examNotesEventName, serviceId);
 }

@@ -3,18 +3,17 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int semestreSummaryEventId = Apis.currentAcademiqueYearCycles.index;
+final String semestreSummaryEventName = Apis.currentAcademiqueYearCycles.name;
+
 class SemestreSummaryCommand extends Command<SemestreSummaryEventData,
     SemestreSummaryRawEventData, SemestreSummaryResponse> {
-  static final int id = Apis.currentAcademiqueYearCycles.index;
-  static final String name = Apis.currentAcademiqueYearCycles.name;
-
-  SemestreSummaryCommand() : super(id, name);
+  SemestreSummaryCommand() : super(semestreSummaryEventId, semestreSummaryEventName);
 
   @override
   Future<SemestreSummaryResponse> handleEvent(
       SemestreSummaryEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
@@ -22,8 +21,7 @@ class SemestreSummaryCommand extends Command<SemestreSummaryEventData,
       SemestreSummaryRawEventData eventData) {
     Api api = AcademiqueYearCyclesApi();
 
-       String apiUrl = api.url.replaceAll(studyLevelToken, eventData.studyLevel);
-
+    String apiUrl = api.url.replaceAll(studyLevelToken, eventData.studyLevel);
 
     Uri url = Uri.https(host, apiUrl);
 
@@ -35,11 +33,11 @@ class SemestreSummaryCommand extends Command<SemestreSummaryEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
-         List<SemetreSummary> semestres = decodedResponse
+        List<SemetreSummary> semestres = decodedResponse
             .map((e) => SemetreSummary.fromJson(e as Map<String, dynamic>))
             .toList();
         return SemestreSummaryResponse(
-                messageId: eventData.messageId, semestreSummary: semestres);
+            messageId: eventData.messageId, semestreSummary: semestres);
       } catch (e) {
         return SemestreSummaryResponse(
             status: ServiceEventResponseStatus.error,
@@ -51,20 +49,17 @@ class SemestreSummaryCommand extends Command<SemestreSummaryEventData,
 
 class SemestreSummaryEventData
     extends ServiceEventData<SemestreSummaryRawEventData> {
-  final int messageId;
   final String studyLevel;
-
 
   final String authKey;
   SemestreSummaryEventData({
     required this.studyLevel,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  SemestreSummaryRawEventData toRawServiceEventData(int messageId) {
+  SemestreSummaryRawEventData toRawServiceEventData( ) {
     return SemestreSummaryRawEventData(
         authKey: authKey,
         studyLevel: studyLevel,
@@ -75,7 +70,6 @@ class SemestreSummaryEventData
 
 class SemestreSummaryRawEventData extends RawServiceEventData {
   final String studyLevel;
-
 
   final String authKey;
 
@@ -173,4 +167,8 @@ class SemetreSummary {
       refCodePeriodicite: json[SemetreSummaryKey.refCodePeriodicite.name],
     );
   }
+}
+
+class SemestreSummaryEvent extends ServiceEvent<SemestreSummaryResponse>{
+  SemestreSummaryEvent({required super.eventData,super.callback}) : super(semestreSummaryEventId, semestreSummaryEventName, serviceId);
 }

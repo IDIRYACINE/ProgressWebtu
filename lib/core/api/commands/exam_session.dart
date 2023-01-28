@@ -3,17 +3,16 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int examResultsEventId = Apis.examsResults.index;
+final String examResultsEventName = Apis.examsResults.name;
+
 class ExamSessionsCommand extends Command<ExamSessionsEventData,
     ExamSessionsRawEventData, ExamSessionsResponse> {
-  static final int id = Apis.examsResults.index;
-  static final String name = Apis.examsResults.name;
-
-  ExamSessionsCommand() : super(id, name);
+  ExamSessionsCommand() : super(examResultsEventId, examResultsEventName);
 
   @override
   Future<ExamSessionsResponse> handleEvent(ExamSessionsEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
@@ -51,7 +50,6 @@ class ExamSessionsCommand extends Command<ExamSessionsEventData,
 }
 
 class ExamSessionsEventData extends ServiceEventData<ExamSessionsRawEventData> {
-  final int messageId;
   final String studyLevel;
   final String formationId;
 
@@ -60,12 +58,11 @@ class ExamSessionsEventData extends ServiceEventData<ExamSessionsRawEventData> {
     required this.formationId,
     required this.studyLevel,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  ExamSessionsRawEventData toRawServiceEventData(int messageId) {
+  ExamSessionsRawEventData toRawServiceEventData( ) {
     return ExamSessionsRawEventData(
         formationId: formationId,
         authKey: authKey,
@@ -290,4 +287,8 @@ class ExamSession {
       situationLibelleFr: json[ExamSessionKey.situationLibelleFr.name],
     );
   }
+}
+
+class ExamSessionEvent extends ServiceEvent<ExamSessionsResponse>{
+  ExamSessionEvent({required super.eventData,super.callback}) : super(examResultsEventId, examResultsEventName, serviceId);
 }

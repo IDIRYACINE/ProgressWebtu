@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:progresswebtu/constants/metadata.dart';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/core/navigator/feature.dart';
+import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:progresswebtu/widgets/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class LoginLogic {
   LoginLogic();
+  static const id = "LoginLogic";
 
   final formKey = GlobalKey<FormState>();
 
@@ -15,9 +18,18 @@ class LoginLogic {
 
   void connect() {
     if (formKey.currentState!.validate()) {
-      ApiService.instance().login(_username!, _password!,
-          onSucess: _onLoginSuccess, onFail: _onLoginFail);
+      _sendLoginEvent(_username!, _password!);
     }
+  }
+
+  void _sendLoginEvent(String username, String password) {
+    final service = ApiService.instance();
+    
+    final eventData = LoginEventData(
+        username: username, password: password,  requesterId: id);
+    final event = LoginEvent(eventData: eventData , callback: _handleLoginResponse);
+    
+    service.onEventForCallback(event);
   }
 
   Future<bool> connectWithSharedPrefs() async {
@@ -27,9 +39,7 @@ class LoginLogic {
     final password = prefs.getString(AppMetadata.passwordSharedPrefKey) ?? '';
 
     if (username.isNotEmpty && password.isNotEmpty) {
-      ApiService.instance().login(username, password, onSucess: (data) {
-        AppNavigator.pushNamedReplacement(dashboardRoute);
-      }, onFail: _onLoginFail);
+      _sendLoginEvent(username, password);
     }
 
     return true;
@@ -51,7 +61,7 @@ class LoginLogic {
     AppNavigator.displayDialog(buildHintDialog());
   }
 
-  Future<void> _onLoginSuccess(AuthResponse response) async {
+  Future<void> _onLoginSuccess(LoginResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(AppMetadata.usernameSharedPrefKey, _username!);
     prefs.setString(AppMetadata.passwordSharedPrefKey, _password!);
@@ -61,5 +71,13 @@ class LoginLogic {
 
   void _onLoginFail() {
     AppNavigator.displayDialog(buildHintDialog("Wrong username or password"));
+  }
+
+  void _handleLoginResponse(AuthEventResponse response) {
+    if (response.responseType == ServiceEventResponseStatus.success) {
+      _onLoginSuccess(response.authResponse!);
+    } else {
+      _onLoginFail();
+    }
   }
 }

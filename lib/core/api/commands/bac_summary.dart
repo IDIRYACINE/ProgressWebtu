@@ -3,17 +3,16 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int bacSummaryEventId = Apis.profile.index;
+final String bacSummaryEventName = Apis.profile.name;
+
 class BacSummaryCommand extends Command<BacSummaryEventData,
     BacSummaryRawEventData, BacSummaryResponse> {
-  static final int id = Apis.profile.index;
-  static final String name = Apis.profile.name;
-
-  BacSummaryCommand() : super(id, name);
+  BacSummaryCommand() : super(bacSummaryEventId, bacSummaryEventName);
 
   @override
   Future<BacSummaryResponse> handleEvent(BacSummaryEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
@@ -48,7 +47,6 @@ class BacSummaryCommand extends Command<BacSummaryEventData,
 }
 
 class BacSummaryEventData extends ServiceEventData<BacSummaryRawEventData> {
-  final int messageId;
   final String username;
 
   final String bacYear;
@@ -58,12 +56,11 @@ class BacSummaryEventData extends ServiceEventData<BacSummaryRawEventData> {
     required this.username,
     required this.bacYear,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  BacSummaryRawEventData toRawServiceEventData(int messageId) {
+  BacSummaryRawEventData toRawServiceEventData() {
     return BacSummaryRawEventData(
         authKey: authKey,
         bacYear: bacYear,
@@ -184,4 +181,8 @@ class BacSummary {
       refCodeWilayaBac: refCodeWilayaBac,
     );
   }
+}
+
+class BacSummaryEvent extends ServiceEvent<BacSummaryResponse> {
+  BacSummaryEvent({required super.eventData,super.callback}) : super(bacSummaryEventId, bacSummaryEventName, serviceId);
 }

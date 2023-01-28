@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
 typedef VoidCallback = void Function();
+typedef Callback<T> = void Function(T);
 
 abstract class ServiceStore {
   late List<Service> _services;
@@ -21,12 +22,12 @@ abstract class ServiceStore {
   void sendEvent(ServiceEvent event) {
     Service? service = _searchAlgorithm.search(_services, event.serviceId);
     if (service != null) {
-      service.onEvent(event);
+      service.onEventForCallback(event);
     }
   }
 }
 
-abstract class Service {
+abstract class Service{
   late int serviceId;
   late String serviceName;
   late Stream stream;
@@ -52,11 +53,13 @@ abstract class Service {
     }
   }
 
-  void onEvent(ServiceEvent event);
-  void onRawEvent(RawServiceEventData event);
+  void onEventForCallback(ServiceEvent event);
+  Future<ServiceEventResponse> onEventForResponse(ServiceEvent event);
+  Future<ServiceEventResponse> onRawEvent(RawServiceEventData event);
 }
 
-abstract class Command<A extends ServiceEventData ,B extends RawServiceEventData ,O extends ServiceEventResponse> {
+abstract class Command<A extends ServiceEventData,
+    B extends RawServiceEventData, O extends ServiceEventResponse> {
   final int commandId;
   final String commandName;
 
@@ -66,29 +69,35 @@ abstract class Command<A extends ServiceEventData ,B extends RawServiceEventData
   Future<O> handleRawEvent(B eventData);
 }
 
-abstract class ServiceEvent {
+abstract class ServiceEvent<R extends ServiceEventResponse> {
   final int serviceId;
   final int eventId;
   final String eventName;
 
   final ServiceEventData eventData;
 
-  late int messageId;
+  final Callback<R>? callback;
 
-  ServiceEvent({
-    required this.serviceId,
-    required this.eventId,
-    required this.eventName,
+  ServiceEvent(
+    this.eventId,
+    this.eventName,
+    this.serviceId, {
+    this.callback,
     required this.eventData,
   });
 }
 
 abstract class ServiceEventData<T extends RawServiceEventData> {
   final String requesterId;
+  int messageId = 0;
 
   ServiceEventData(this.requesterId);
 
-  T toRawServiceEventData(int messageId);
+  T toRawServiceEventData();
+
+  void setMessageId(int messageId) {
+    this.messageId = messageId;
+  }
 }
 
 abstract class RawServiceEventData {
@@ -96,12 +105,13 @@ abstract class RawServiceEventData {
   final int messageId;
   final int eventId;
 
-  RawServiceEventData(this.messageId,this.requesterId, this.eventId);
+  RawServiceEventData(this.messageId, this.requesterId, this.eventId);
 }
 
 enum ServiceEventResponseStatus {
   success,
   error,
+  unhandled,
 }
 
 abstract class ServiceEventResponse {
@@ -109,4 +119,9 @@ abstract class ServiceEventResponse {
   final ServiceEventResponseStatus responseType;
 
   ServiceEventResponse(this.messageId, this.responseType);
+}
+
+class UnhandeledEventResponse extends ServiceEventResponse {
+  UnhandeledEventResponse(int messageId)
+      : super(messageId, ServiceEventResponseStatus.unhandled);
 }

@@ -3,18 +3,17 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int allAcademicYearEventId = Apis.dias.index;
+final String allAcademicYearEventName = Apis.dias.name;
+
 class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
     AcademicYearAllRawEventData, AcademicYearAllResponse> {
-  static final int id = Apis.dias.index;
-  static final String name = Apis.dias.name;
-
-  AcademicYearAllCommand() : super(id, name);
+  AcademicYearAllCommand() : super(allAcademicYearEventId, allAcademicYearEventName);
 
   @override
   Future<AcademicYearAllResponse> handleEvent(
       AcademicYearAllEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
@@ -54,7 +53,6 @@ class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
 
 class AcademicYearAllEventData
     extends ServiceEventData<AcademicYearAllRawEventData> {
-  final int messageId;
   final String username;
 
   final String bacYear;
@@ -64,12 +62,11 @@ class AcademicYearAllEventData
     required this.username,
     required this.bacYear,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  AcademicYearAllRawEventData toRawServiceEventData(int messageId) {
+  AcademicYearAllRawEventData toRawServiceEventData() {
     return AcademicYearAllRawEventData(
         authKey: authKey,
         bacYear: bacYear,
@@ -299,4 +296,8 @@ class AcademicYear {
       refCodeCycle: json[AcademicYearKey.refCodeCycle.name],
     );
   }
+}
+
+class AcademicYearEvent extends ServiceEvent<AcademicYearAllResponse>{
+  AcademicYearEvent({required super.eventData,super.callback}) : super(allAcademicYearEventId, allAcademicYearEventName, serviceId);
 }

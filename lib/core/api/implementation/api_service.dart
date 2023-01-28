@@ -1,6 +1,8 @@
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:http/http.dart' as http;
 
+const serviceId = 0;
+
 class ApiService extends Service {
   static ApiService? _instance;
   final http.Client client = http.Client();
@@ -36,18 +38,33 @@ class ApiService extends Service {
   void _registerDefaultCommands() {}
 
   @override
-  void onEvent(ServiceEvent event) {
+  void onEventForCallback(ServiceEvent event) {
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
-      command.handleEvent(event.eventData);
+      command.handleEvent(event.eventData).then((response) {
+        event.callback??(response);
+      });
     }
   }
 
   @override
-  void onRawEvent(RawServiceEventData event) {
+  Future<ServiceEventResponse> onRawEvent(RawServiceEventData event) {
      Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
-      command.handleRawEvent(event);
+      return command.handleRawEvent(event);
     }
+    return Future.value(UnhandeledEventResponse(event.messageId));
+  }
+  
+  @override
+  Future<ServiceEventResponse> onEventForResponse(ServiceEvent<ServiceEventResponse> event) {
+    Command? command = searchAlgorithm.search(commands, event.eventId);
+    if (command != null) {
+      command.handleEvent(event.eventData).then((response) {
+        return event.callback??(response);
+      });
+    }
+    return Future.value(UnhandeledEventResponse(event.eventData.messageId));
+
   }
 }

@@ -3,18 +3,16 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int loginEventId = Apis.authenticate.index;
+final String loginEventName = Apis.authenticate.name;
+
 class LoginCommand
     extends Command<LoginEventData, LoginEventRawData, AuthEventResponse> {
-  static final int id = Apis.authenticate.index;
-  static final String name = Apis.authenticate.name;
-
-  LoginCommand() : super(id, name);
+  LoginCommand() : super(loginEventId, loginEventName);
 
   @override
   Future<AuthEventResponse> handleEvent(LoginEventData eventData) async {
-    int messageId = eventData.messageId;
-
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
@@ -36,7 +34,7 @@ class LoginCommand
       try {
         final decodedResponse =
             jsonDecode(response.body) as Map<String, dynamic>;
-        AuthResponse authResponse = AuthResponse.fromJson(decodedResponse);
+        LoginResponse authResponse = LoginResponse.fromJson(decodedResponse);
 
         return AuthEventResponse(
             authResponse: authResponse, messageId: eventData.messageId);
@@ -63,7 +61,7 @@ enum LoginRequestKeys {
   password,
 }
 
-class AuthResponse {
+class LoginResponse {
   final int etablissementId;
   final String expirationDate;
   final int idIndividu;
@@ -71,7 +69,7 @@ class AuthResponse {
   final int userId;
   final String userName;
 
-  AuthResponse(
+  LoginResponse(
       {required this.etablissementId,
       required this.expirationDate,
       required this.idIndividu,
@@ -79,8 +77,8 @@ class AuthResponse {
       required this.userId,
       required this.userName});
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) {
-    return AuthResponse(
+  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+    return LoginResponse(
       etablissementId: json[LoginResponseKeys.etablissementId.name],
       expirationDate: json[LoginResponseKeys.expirationDate.name],
       idIndividu: json[LoginResponseKeys.idIndividu.name],
@@ -103,20 +101,18 @@ class LoginEventRawData extends RawServiceEventData {
       : super(messageId, requesterId, Apis.authenticate.index);
 }
 
-class LoginEventData extends ServiceEventData {
+class LoginEventData extends ServiceEventData<LoginEventRawData> {
   final String username;
   final String password;
-  final int messageId;
 
-  LoginEventData(
-      {required this.username,
-      required this.password,
-      required this.messageId,
-      required String requesterId})
-      : super(requesterId);
+  LoginEventData({
+    required this.username,
+    required this.password,
+    required String requesterId,
+  }) : super(requesterId);
 
   @override
-  LoginEventRawData toRawServiceEventData(int messageId) {
+  LoginEventRawData toRawServiceEventData( ) {
     return LoginEventRawData(
         username: username,
         password: password,
@@ -126,11 +122,15 @@ class LoginEventData extends ServiceEventData {
 }
 
 class AuthEventResponse extends ServiceEventResponse {
-  final AuthResponse? authResponse;
+  final LoginResponse? authResponse;
 
   AuthEventResponse(
       {this.authResponse,
       required int messageId,
       ServiceEventResponseStatus status = ServiceEventResponseStatus.success})
       : super(messageId, status);
+}
+
+class LoginEvent extends ServiceEvent<AuthEventResponse> {
+  LoginEvent({required super.eventData,super.callback}) : super(loginEventId, loginEventName, serviceId);
 }

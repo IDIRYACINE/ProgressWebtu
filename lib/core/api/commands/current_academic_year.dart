@@ -1,25 +1,24 @@
-
-
 import 'dart:convert';
 
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
+final int examNotesEventId = Apis.currentAcademiqueYear.index;
+final String examNotesEventName = Apis.currentAcademiqueYear.name;
+
 class CurrentAcademicYearCommand extends Command<CurrentAcademicYearEventData,
     CurrentAcademicYearRawEventData, CurrentAcademicYearResponse> {
-  static final int id = Apis.currentAcademiqueYear.index;
-  static final String name = Apis.currentAcademiqueYear.name;
-
-  CurrentAcademicYearCommand() : super(id, name);
+  CurrentAcademicYearCommand() : super(examNotesEventId, examNotesEventName);
 
   @override
-  Future<CurrentAcademicYearResponse> handleEvent(CurrentAcademicYearEventData eventData) {
-    int messageId = eventData.messageId;
-    return handleRawEvent(eventData.toRawServiceEventData(messageId));
+  Future<CurrentAcademicYearResponse> handleEvent(
+      CurrentAcademicYearEventData eventData) {
+    return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
-  Future<CurrentAcademicYearResponse> handleRawEvent(CurrentAcademicYearRawEventData eventData) {
+  Future<CurrentAcademicYearResponse> handleRawEvent(
+      CurrentAcademicYearRawEventData eventData) {
     Api api = CurrentAcademicYearApi();
 
     String apiUrl = api.url.replaceAll(usernameToken, eventData.username);
@@ -29,16 +28,22 @@ class CurrentAcademicYearCommand extends Command<CurrentAcademicYearEventData,
     Uri url = Uri.https(host, apiUrl);
 
     final headers = {"authorization": eventData.authKey};
-   
-    return  ApiService.instance().client.get(url, headers: headers).then((response) {
+
+    return ApiService.instance()
+        .client
+        .get(url, headers: headers)
+        .then((response) {
       try {
         final decodedResponse =
             jsonDecode(response.body) as Map<String, dynamic>;
 
-         CurrentAcademiqueYear academicYear =
+        CurrentAcademiqueYear academicYear =
             CurrentAcademiqueYear.fromJson(decodedResponse);
 
-        CurrentAcademicYearResponse currentAcademicYearResponse = CurrentAcademicYearResponse(messageId: eventData.messageId, currentAcademicYear: academicYear);
+        CurrentAcademicYearResponse currentAcademicYearResponse =
+            CurrentAcademicYearResponse(
+                messageId: eventData.messageId,
+                currentAcademicYear: academicYear);
         return currentAcademicYearResponse;
       } catch (e) {
         return CurrentAcademicYearResponse(
@@ -46,34 +51,34 @@ class CurrentAcademicYearCommand extends Command<CurrentAcademicYearEventData,
             messageId: eventData.messageId);
       }
     });
-}
+  }
 }
 
-class CurrentAcademicYearEventData extends ServiceEventData<CurrentAcademicYearRawEventData> {
-  final int messageId;
+class CurrentAcademicYearEventData
+    extends ServiceEventData<CurrentAcademicYearRawEventData> {
   final String username;
-    final String academicYearId;
+  final String academicYearId;
 
   final String bacYear;
 
   final String authKey;
-  CurrentAcademicYearEventData( {
+  CurrentAcademicYearEventData({
     required this.academicYearId,
     required this.username,
     required this.bacYear,
     required this.authKey,
-    required this.messageId,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  CurrentAcademicYearRawEventData toRawServiceEventData(int messageId) {
+  CurrentAcademicYearRawEventData toRawServiceEventData( ) {
     return CurrentAcademicYearRawEventData(
         authKey: authKey,
         bacYear: bacYear,
         username: username,
         messageId: messageId,
-        requesterId: requesterId, academicYearId: academicYearId);
+        requesterId: requesterId,
+        academicYearId: academicYearId);
   }
 }
 
@@ -88,7 +93,7 @@ class CurrentAcademicYearRawEventData extends RawServiceEventData {
 
   CurrentAcademicYearRawEventData(
       {required this.username,
-      required this.academicYearId, 
+      required this.academicYearId,
       required this.bacYear,
       required this.authKey,
       required int messageId,
@@ -150,8 +155,9 @@ class CurrentAcademiqueYear {
         dateDebut: json[CurrentAcademiqueYearKey.dateDebut.name] != null
             ? DateTime.parse(json[CurrentAcademiqueYearKey.dateDebut.name])
             : null,
-        dateFin:
-            json[CurrentAcademiqueYearKey.dateFin.name] != null ? DateTime.parse(json[CurrentAcademiqueYearKey.dateFin.name]) : null,
+        dateFin: json[CurrentAcademiqueYearKey.dateFin.name] != null
+            ? DateTime.parse(json[CurrentAcademiqueYearKey.dateFin.name])
+            : null,
         deuxiemeAnnee: json[CurrentAcademiqueYearKey.deuxiemeAnnee.name],
         id: json[CurrentAcademiqueYearKey.id.name],
         libelle: json[CurrentAcademiqueYearKey.libelle.name],
@@ -160,4 +166,9 @@ class CurrentAcademiqueYear {
         semaineFin: json[CurrentAcademiqueYearKey.semaineFin.name],
         valid: json[CurrentAcademiqueYearKey.valid.name]);
   }
+}
+
+class CurrentAcademicYearEvent extends ServiceEvent<CurrentAcademicYearResponse>{
+  CurrentAcademicYearEvent({required super.eventData,super.callback})
+      : super(examNotesEventId, examNotesEventName, serviceId);
 }

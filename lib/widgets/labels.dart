@@ -12,3 +12,27 @@ class ProgresBannerLabel extends StatelessWidget {
     );
   }
 }
+
+class InformationLabel extends StatelessWidget {
+  const InformationLabel({super.key, required this.title , required this.text,this.textStyle});
+
+  final String text;
+  final String title;
+  final TextStyle? textStyle;
+
+  @override
+  Widget build(BuildContext context) {
+
+    final style = textStyle ?? Theme.of(context).textTheme.headline6;
+
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(title, style: style),
+          Text(text, style: style),
+        ],
+      ),
+    );
+  }
+}

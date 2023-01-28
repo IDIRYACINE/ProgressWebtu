@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progresswebtu/appState/state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:progresswebtu/widgets/labels.dart';
 import 'logic.dart';
 
 class BacInformationsView extends StatefulWidget {
-  const BacInformationsView({super.key = const Key('BacInformationsView')});
+  const BacInformationsView({super.key});
 
   @override
   State<StatefulWidget> createState() => BacInformationsViewState();
@@ -17,7 +17,6 @@ class BacInformationsViewState extends State<BacInformationsView> {
 
   @override
   Widget build(BuildContext context) {
-   
     logic.setWidgetContext(context);
 
     return Scaffold(
@@ -30,9 +29,10 @@ class BacInformationsViewState extends State<BacInformationsView> {
           final authState = state.authState;
           logic.loadBacSummary(authState.userName, authState.token);
 
-          return  Center(child: Text(AppLocalizations.of(context)!.loading));
+          return Center(child: Text(AppLocalizations.of(context)!.loading));
         } else {
-          return Center(child: Text(AppLocalizations.of(context)!.couldNotLoadData));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.couldNotLoadData));
         }
       }),
     );
@@ -46,15 +46,22 @@ class _LoadedBacSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations localizations = AppLocalizations.of(context)!;
+
     return Column(
       children: [
-        Text("anne Bac : ${bacSummary.anneeBac}"),
-        Text("date naissance : ${bacSummary.dateNaissance}"),
-        Text("moyenneBac : ${bacSummary.moyenneBac}"),
-        Text("nom Fr : ${bacSummary.nomFr}"),
-        Text("nom Ar : ${bacSummary.nomAr}"),
-        Text("prenom Fr : ${bacSummary.prenomFr}"),
-        Text("prenom Ar : ${bacSummary.prenomAr}"),
+        InformationLabel(
+            title: localizations.anneeBac, text: bacSummary.anneeBac),
+        InformationLabel(
+            title: localizations.dateNaissance, text: bacSummary.dateNaissance),
+        InformationLabel(
+            title: localizations.moyenneBac, text: bacSummary.moyenneBac),
+        InformationLabel(title: localizations.nomFr, text: bacSummary.nomFr),
+        InformationLabel(
+            title: localizations.prenomFr, text: bacSummary.prenomFr),
+        InformationLabel(title: localizations.nomAr, text: bacSummary.nomAr),
+        InformationLabel(
+            title: localizations.prenomAr, text: bacSummary.prenomAr),
       ],
     );
   }

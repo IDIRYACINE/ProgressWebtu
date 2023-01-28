@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:progresswebtu/appState/state.dart' as bloc;
 import 'package:progresswebtu/constants/metadata.dart';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/core/navigator/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:progresswebtu/widgets/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginLogic {
   LoginLogic();
@@ -24,11 +26,12 @@ class LoginLogic {
 
   void _sendLoginEvent(String username, String password) {
     final service = ApiService.instance();
-    
-    final eventData = LoginEventData(
-        username: username, password: password,  requesterId: id);
-    final event = LoginEvent(eventData: eventData , callback: _handleLoginResponse);
-    
+
+    final eventData =
+        LoginEventData(username: username, password: password, requesterId: id);
+    final event =
+        LoginEvent(eventData: eventData, callback: _handleLoginResponse);
+
     service.onEventForCallback(event);
   }
 
@@ -37,6 +40,7 @@ class LoginLogic {
 
     final username = prefs.getString(AppMetadata.usernameSharedPrefKey) ?? '';
     final password = prefs.getString(AppMetadata.passwordSharedPrefKey) ?? '';
+
 
     if (username.isNotEmpty && password.isNotEmpty) {
       _sendLoginEvent(username, password);
@@ -65,12 +69,19 @@ class LoginLogic {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(AppMetadata.usernameSharedPrefKey, _username!);
     prefs.setString(AppMetadata.passwordSharedPrefKey, _password!);
+    prefs.setString(AppMetadata.authTokenSharedPrefKey, response.token);
+    prefs.setString(
+        AppMetadata.authTokenExpirationSharedPrefKey, response.expirationDate);
+
+    BlocProvider.of<bloc.AppBloc>(formKey.currentContext!)
+        .add(bloc.UpdateAuthState(response));
 
     AppNavigator.pushNamedReplacement(dashboardRoute);
   }
 
   void _onLoginFail() {
-    AppNavigator.displayDialog(buildHintDialog("Wrong username or password"));
+    AppNavigator.displayDialog(buildHintDialog(
+        AppLocalizations.of(formKey.currentContext!)!.wrongUsernameOrPassword));
   }
 
   void _handleLoginResponse(AuthEventResponse response) {

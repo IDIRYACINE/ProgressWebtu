@@ -38,7 +38,9 @@
     "wrongUsernameOrPassword": "Nom d'utilisateur ou mot de passe incorrect",
     "loginFailed": "Échec de la connexion",
     "usernameInvalid": "Nom d'utilisateur invalide",
-    "unavailable": "Indisponible"
+    "unavailable": "Indisponible",
+    "couldNotLoadData": "Impossible de charger les données",
+    "loading": "Chargement"
 
 
 

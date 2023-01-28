@@ -38,6 +38,8 @@
     "wrongUsernameOrPassword": "اسم المستخدم أو كلمة المرور خاطئة",
     "loginFailed": "فشل تسجيل الدخول",
     "usernameInvalid": "اسم المستخدم غير صحيح",
-    "unavailable": "غير متوفر"
+    "unavailable": "غير متوفر",
+    "couldNotLoadData": "لا يمكن تحميل البيانات",
+    "loading": "جاري التحميل"
 
 }

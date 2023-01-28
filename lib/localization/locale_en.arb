@@ -37,5 +37,7 @@
     "wrongUsernameOrPassword": "Wrong username or password",
     "loginFailed": "Login failed",
     "usernameInvalid": "Invalid username",
-    "unavailable": "Unavailable"
+    "unavailable": "Unavailable",
+    "couldNotLoadData": "Could not load data",
+    "loading": "Loading"
 }

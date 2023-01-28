@@ -5,4 +5,6 @@ abstract class AppMetadata{
   static const progressBannerAsset = 'assets/images/progres_banner_1.png';
   static const usernameSharedPrefKey = 'username';
   static const passwordSharedPrefKey = 'password';
+  static const authTokenSharedPrefKey = 'authToken';
+  static const authTokenExpirationSharedPrefKey = 'expirationDate';
 }

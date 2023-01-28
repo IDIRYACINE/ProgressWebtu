@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:progresswebtu/core/api/feature.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:progresswebtu/appState/state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'logic.dart';
 
 class BacInformationsView extends StatefulWidget {
@@ -12,25 +14,20 @@ class BacInformationsView extends StatefulWidget {
 class BacInformationsViewState extends State<BacInformationsView> {
   final logic = BacViewLogic();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: FutureBuilder(
-          future: logic.loadBacSummary(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data != null) {
-                return _LoadedBacSummary(
-                    bacSummary: snapshot.data as BacSummary);
-              } else {
-                return const Center(child: Text("Failed to load"));
-              }
-            } else {
-              return const Center(child: Text("Loading"));
-            }
-          }),
+      body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
+        final status = state.bacSummaryState.stateStatus;
+        if (status == StateStatus.ready) {
+          return _LoadedBacSummary(bacSummary: state.bacSummaryState);
+        } else if (status == StateStatus.loading) {
+          return  Center(child: Text(AppLocalizations.of(context)!.loading));
+        } else {
+          return Center(child: Text(AppLocalizations.of(context)!.couldNotLoadData));
+        }
+      }),
     );
   }
 }
@@ -38,7 +35,7 @@ class BacInformationsViewState extends State<BacInformationsView> {
 class _LoadedBacSummary extends StatelessWidget {
   const _LoadedBacSummary({required this.bacSummary});
 
-  final BacSummary bacSummary;
+  final BacSummaryState bacSummary;
 
   @override
   Widget build(BuildContext context) {

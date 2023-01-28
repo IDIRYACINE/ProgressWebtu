@@ -84,7 +84,9 @@ class LoginLogic {
         AppLocalizations.of(formKey.currentContext!)!.wrongUsernameOrPassword));
   }
 
-  void _handleLoginResponse(AuthEventResponse response) {
+  void _handleLoginResponse(ServiceEventResponse response) {
+    response = response as AuthEventResponse;
+
     if (response.responseType == ServiceEventResponseStatus.success) {
       _onLoginSuccess(response.authResponse!);
     } else {

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
 typedef VoidCallback = void Function();
-typedef Callback<T> = void Function(T);
+typedef ServiceCallback<T> = void Function(T);
 
 abstract class ServiceStore {
   late List<Service> _services;
@@ -42,6 +42,14 @@ abstract class Service{
     commands.add(command);
   }
 
+  void registerCommandAtIndex(Command command) {
+    commands.insert(command.commandId, command);
+  }
+
+  void replaceCommandAtIndex(Command command) {
+    commands[command.commandId] = command;
+  }
+
   void unregisterCommand(Command command) {
     commands.remove(command);
   }
@@ -69,6 +77,21 @@ abstract class Command<A extends ServiceEventData,
   Future<O> handleRawEvent(B eventData);
 }
 
+class EmptyCommand extends Command{
+  EmptyCommand(int commandId) : super(commandId, "EmptyCommand");
+
+  @override
+  Future<ServiceEventResponse> handleEvent(ServiceEventData<RawServiceEventData> eventData) {
+    throw UnimplementedError("EmptyCommand");
+  }
+
+  @override
+  Future<ServiceEventResponse> handleRawEvent(RawServiceEventData eventData) {
+    throw UnimplementedError("EmptyCommand");
+  }
+
+}
+
 abstract class ServiceEvent<R extends ServiceEventResponse> {
   final int serviceId;
   final int eventId;
@@ -76,7 +99,7 @@ abstract class ServiceEvent<R extends ServiceEventResponse> {
 
   final ServiceEventData eventData;
 
-  final Callback<R>? callback;
+  final ServiceCallback<R>? callback;
 
   ServiceEvent(
     this.eventId,

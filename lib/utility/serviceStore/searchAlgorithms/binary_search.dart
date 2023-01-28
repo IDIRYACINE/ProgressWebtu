@@ -11,7 +11,7 @@ class BinarySearchComparator<S, T> extends Comparator<S, T> {
 class BinarySearchAlgorithm<E, T>
     extends SearchAlgorithm<E,T,BinarySearchComparator<E,T>> {
 
-  final BinarySearchComparator comparator;
+  final BinarySearchComparator<E,T> comparator;
 
   BinarySearchAlgorithm(this.comparator);
 

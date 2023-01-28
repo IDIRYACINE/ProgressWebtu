@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progresswebtu/appState/state.dart';
@@ -5,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'logic.dart';
 
 class BacInformationsView extends StatefulWidget {
-  const BacInformationsView({super.key});
+  const BacInformationsView({super.key = const Key('BacInformationsView')});
 
   @override
   State<StatefulWidget> createState() => BacInformationsViewState();
@@ -16,6 +17,9 @@ class BacInformationsViewState extends State<BacInformationsView> {
 
   @override
   Widget build(BuildContext context) {
+   
+    logic.setWidgetContext(context);
+
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
@@ -23,6 +27,9 @@ class BacInformationsViewState extends State<BacInformationsView> {
         if (status == StateStatus.ready) {
           return _LoadedBacSummary(bacSummary: state.bacSummaryState);
         } else if (status == StateStatus.loading) {
+          final authState = state.authState;
+          logic.loadBacSummary(authState.userName, authState.token);
+
           return  Center(child: Text(AppLocalizations.of(context)!.loading));
         } else {
           return Center(child: Text(AppLocalizations.of(context)!.couldNotLoadData));

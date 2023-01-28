@@ -1,3 +1,12 @@
+import 'package:progresswebtu/core/api/commands/academic_year_all.dart';
+import 'package:progresswebtu/core/api/commands/bac_notes.dart';
+import 'package:progresswebtu/core/api/commands/bac_summary.dart';
+import 'package:progresswebtu/core/api/commands/current_academic_year.dart';
+import 'package:progresswebtu/core/api/commands/exam_notes.dart';
+import 'package:progresswebtu/core/api/commands/exam_session.dart';
+import 'package:progresswebtu/core/api/commands/login.dart';
+import 'package:progresswebtu/core/api/commands/semestre_summary.dart';
+import 'package:progresswebtu/core/api/implementation/apis.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:http/http.dart' as http;
 
@@ -6,7 +15,6 @@ const serviceId = 0;
 class ApiService extends Service {
   static ApiService? _instance;
   final http.Client client = http.Client();
-
 
   ApiService._internal(super.searchAlgorithm);
 
@@ -35,36 +43,48 @@ class ApiService extends Service {
     return searchAlgorithm;
   }
 
-  void _registerDefaultCommands() {}
+  void _registerDefaultCommands() {
+    commands = List.filled(
+      Apis.values.length,
+      EmptyCommand(-1),
+    );
+
+    replaceCommandAtIndex(LoginCommand());
+    replaceCommandAtIndex(BacNotesCommand());
+    replaceCommandAtIndex(BacSummaryCommand());
+    replaceCommandAtIndex(ExamNotesCommand());
+    replaceCommandAtIndex(CurrentAcademicYearCommand());
+    replaceCommandAtIndex(AcademicYearAllCommand());
+    replaceCommandAtIndex(ExamSessionsCommand());
+    replaceCommandAtIndex(SemestreSummaryCommand());
+  }
 
   @override
   void onEventForCallback(ServiceEvent event) {
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
       command.handleEvent(event.eventData).then((response) {
-        event.callback??(response);
+        event.callback?.call(response);
       });
     }
   }
 
   @override
   Future<ServiceEventResponse> onRawEvent(RawServiceEventData event) {
-     Command? command = searchAlgorithm.search(commands, event.eventId);
+    Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
       return command.handleRawEvent(event);
     }
     return Future.value(UnhandeledEventResponse(event.messageId));
   }
-  
+
   @override
-  Future<ServiceEventResponse> onEventForResponse(ServiceEvent<ServiceEventResponse> event) {
+  Future<ServiceEventResponse> onEventForResponse(
+      ServiceEvent<ServiceEventResponse> event) {
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
-      command.handleEvent(event.eventData).then((response) {
-        return event.callback??(response);
-      });
+      return command.handleEvent(event.eventData);
     }
     return Future.value(UnhandeledEventResponse(event.eventData.messageId));
-
   }
 }

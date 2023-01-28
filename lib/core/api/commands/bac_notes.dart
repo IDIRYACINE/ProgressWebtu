@@ -6,9 +6,9 @@ import 'package:progresswebtu/utility/serviceStore/service.dart';
 final int bacNotesEventId = Apis.bacResults.index;
 final String bacNotesEventName = Apis.bacResults.name;
 
-class BacSummaryCommand
+class BacNotesCommand
     extends Command<BacNotesEventData, BacNotesRawEventData, BacNotesResponse> {
-  BacSummaryCommand() : super(bacNotesEventId, bacNotesEventName);
+  BacNotesCommand() : super(bacNotesEventId, bacNotesEventName);
 
   @override
   Future<BacNotesResponse> handleEvent(BacNotesEventData eventData) {

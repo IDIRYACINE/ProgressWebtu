@@ -8,7 +8,11 @@ final String semestreSummaryEventName = Apis.currentAcademiqueYearCycles.name;
 
 class SemestreSummaryCommand extends Command<SemestreSummaryEventData,
     SemestreSummaryRawEventData, SemestreSummaryResponse> {
-  SemestreSummaryCommand() : super(semestreSummaryEventId, semestreSummaryEventName);
+      
+  final Map<String, String> _headers;
+
+  SemestreSummaryCommand([this._headers = const {}])
+      : super(semestreSummaryEventId, semestreSummaryEventName);
 
   @override
   Future<SemestreSummaryResponse> handleEvent(
@@ -25,11 +29,11 @@ class SemestreSummaryCommand extends Command<SemestreSummaryEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
@@ -59,7 +63,7 @@ class SemestreSummaryEventData
   }) : super(requesterId);
 
   @override
-  SemestreSummaryRawEventData toRawServiceEventData( ) {
+  SemestreSummaryRawEventData toRawServiceEventData() {
     return SemestreSummaryRawEventData(
         authKey: authKey,
         studyLevel: studyLevel,
@@ -169,6 +173,7 @@ class SemetreSummary {
   }
 }
 
-class SemestreSummaryEvent extends ServiceEvent<SemestreSummaryResponse>{
-  SemestreSummaryEvent({required super.eventData,super.callback}) : super(semestreSummaryEventId, semestreSummaryEventName, serviceId);
+class SemestreSummaryEvent extends ServiceEvent<SemestreSummaryResponse> {
+  SemestreSummaryEvent({required super.eventData, super.callback})
+      : super(semestreSummaryEventId, semestreSummaryEventName, serviceId);
 }

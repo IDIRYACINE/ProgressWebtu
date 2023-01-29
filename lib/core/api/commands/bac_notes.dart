@@ -8,7 +8,10 @@ final String bacNotesEventName = Apis.bacResults.name;
 
 class BacNotesCommand
     extends Command<BacNotesEventData, BacNotesRawEventData, BacNotesResponse> {
-  BacNotesCommand() : super(bacNotesEventId, bacNotesEventName);
+  final Map<String, String> _headers;
+
+  BacNotesCommand([this._headers = const {}])
+      : super(bacNotesEventId, bacNotesEventName);
 
   @override
   Future<BacNotesResponse> handleEvent(BacNotesEventData eventData) {
@@ -24,11 +27,11 @@ class BacNotesCommand
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
@@ -119,6 +122,7 @@ class BacNote {
   }
 }
 
-class BacNotesEvent extends ServiceEvent<BacNotesResponse>{
-  BacNotesEvent({required super.eventData,super.callback}) : super(bacNotesEventId, bacNotesEventName, serviceId);
+class BacNotesEvent extends ServiceEvent<BacNotesResponse> {
+  BacNotesEvent({required super.eventData, super.callback})
+      : super(bacNotesEventId, bacNotesEventName, serviceId);
 }

@@ -8,7 +8,10 @@ final String examResultsEventName = Apis.examsResults.name;
 
 class ExamSessionsCommand extends Command<ExamSessionsEventData,
     ExamSessionsRawEventData, ExamSessionsResponse> {
-  ExamSessionsCommand() : super(examResultsEventId, examResultsEventName);
+  final Map<String, String> _headers;
+
+  ExamSessionsCommand([this._headers = const {}])
+      : super(examResultsEventId, examResultsEventName);
 
   @override
   Future<ExamSessionsResponse> handleEvent(ExamSessionsEventData eventData) {
@@ -26,11 +29,11 @@ class ExamSessionsCommand extends Command<ExamSessionsEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
@@ -62,7 +65,7 @@ class ExamSessionsEventData extends ServiceEventData<ExamSessionsRawEventData> {
   }) : super(requesterId);
 
   @override
-  ExamSessionsRawEventData toRawServiceEventData( ) {
+  ExamSessionsRawEventData toRawServiceEventData() {
     return ExamSessionsRawEventData(
         formationId: formationId,
         authKey: authKey,
@@ -289,6 +292,7 @@ class ExamSession {
   }
 }
 
-class ExamSessionEvent extends ServiceEvent<ExamSessionsResponse>{
-  ExamSessionEvent({required super.eventData,super.callback}) : super(examResultsEventId, examResultsEventName, serviceId);
+class ExamSessionEvent extends ServiceEvent<ExamSessionsResponse> {
+  ExamSessionEvent({required super.eventData, super.callback})
+      : super(examResultsEventId, examResultsEventName, serviceId);
 }

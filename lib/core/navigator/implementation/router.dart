@@ -8,6 +8,8 @@ import 'package:progresswebtu/core/settings/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
 import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
 import 'package:progresswebtu/features/bac/feature.dart';
+import 'package:progresswebtu/features/examsResult/implementation/view.dart';
+import 'package:progresswebtu/features/groupsAndSections/implementation/view.dart';
 import 'routes.dart';
 
 abstract class AppRouter {
@@ -43,6 +45,18 @@ abstract class AppRouter {
         return getPageRoute(
           settings: settings,
           view: SplashView(settings: settings),
+        );
+
+        case examResultsRoute:
+        return getPageRoute(
+          settings: settings,
+          view: const ExamsResultView(),
+        );
+
+        case groupeAndSectionsRoute:
+        return getPageRoute(
+          settings: settings,
+          view: const GroupsAndSectionsView(),
         );
 
       default:

@@ -15,15 +15,16 @@ const serviceId = 0;
 class ApiService extends Service {
   static ApiService? _instance;
   final http.Client client = http.Client();
+  final bool isTestMode;
 
-  ApiService._internal(super.searchAlgorithm);
+  ApiService._internal(this.isTestMode, super.searchAlgorithm);
 
-  factory ApiService.instance() {
+  factory ApiService.instance([bool isTestMode = true]) {
     if (_instance == null) {
       BinarySearchAlgorithm<Command, int> searchAlgorithm =
           _createSearchAlgorithm();
 
-      _instance = ApiService._internal(searchAlgorithm);
+      _instance = ApiService._internal(isTestMode, searchAlgorithm);
       _instance!._registerDefaultCommands();
     }
 
@@ -49,14 +50,22 @@ class ApiService extends Service {
       EmptyCommand(-1),
     );
 
-    replaceCommandAtIndex(LoginCommand());
-    replaceCommandAtIndex(BacNotesCommand());
-    replaceCommandAtIndex(BacSummaryCommand());
-    replaceCommandAtIndex(ExamNotesCommand());
-    replaceCommandAtIndex(CurrentAcademicYearCommand());
-    replaceCommandAtIndex(AcademicYearAllCommand());
-    replaceCommandAtIndex(ExamSessionsCommand());
-    replaceCommandAtIndex(SemestreSummaryCommand());
+    final postmanTestHeader = {postmanApiHeader: postmanApiKey};
+
+    replaceCommandAtIndex(LoginCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(BacNotesCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        BacSummaryCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        ExamNotesCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        CurrentAcademicYearCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        AcademicYearAllCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        ExamSessionsCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        SemestreSummaryCommand(isTestMode ? postmanTestHeader : {}));
   }
 
   @override

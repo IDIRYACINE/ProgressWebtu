@@ -8,7 +8,10 @@ final String bacSummaryEventName = Apis.profile.name;
 
 class BacSummaryCommand extends Command<BacSummaryEventData,
     BacSummaryRawEventData, BacSummaryResponse> {
-  BacSummaryCommand() : super(bacSummaryEventId, bacSummaryEventName);
+  final Map<String, String> _headers;
+
+  BacSummaryCommand([this._headers = const {}])
+      : super(bacSummaryEventId, bacSummaryEventName);
 
   @override
   Future<BacSummaryResponse> handleEvent(BacSummaryEventData eventData) {
@@ -24,11 +27,11 @@ class BacSummaryCommand extends Command<BacSummaryEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse =
@@ -184,5 +187,6 @@ class BacSummary {
 }
 
 class BacSummaryEvent extends ServiceEvent<BacSummaryResponse> {
-  BacSummaryEvent({required super.eventData,super.callback}) : super(bacSummaryEventId, bacSummaryEventName, serviceId);
+  BacSummaryEvent({required super.eventData, super.callback})
+      : super(bacSummaryEventId, bacSummaryEventName, serviceId);
 }

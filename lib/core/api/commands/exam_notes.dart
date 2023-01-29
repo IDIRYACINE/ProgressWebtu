@@ -8,7 +8,10 @@ final String examNotesEventName = Apis.examsResults.name;
 
 class ExamNotesCommand extends Command<ExamNotesEventData,
     ExamNotesRawEventData, ExamNotesResponse> {
-  ExamNotesCommand() : super(examNotesEventId, examNotesEventName);
+      
+  final Map<String, String> _headers;
+
+  ExamNotesCommand([this._headers = const {}]) : super(examNotesEventId, examNotesEventName);
 
   @override
   Future<ExamNotesResponse> handleEvent(ExamNotesEventData eventData) {
@@ -23,11 +26,11 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;

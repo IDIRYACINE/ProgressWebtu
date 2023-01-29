@@ -8,19 +8,19 @@ final insertBacCommandId = DatbaseCommands.insertBac.index;
 final insertBacCommandName = DatbaseCommands.insertBac.name;
 
 class InsertBacCommand
-    extends Command<insertBacData, insertBacRawData, insertBacResponse> {
+    extends Command<InsertBacData, InsertBacRawData, InsertBacResponse> {
   final Realm realm;
 
   InsertBacCommand(this.realm)
       : super(insertBacCommandId, insertBacCommandName);
 
   @override
-  Future<insertBacResponse> handleEvent(insertBacData eventData) async {
+  Future<InsertBacResponse> handleEvent(InsertBacData eventData) async {
     return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
-  Future<insertBacResponse> handleRawEvent(insertBacRawData eventData) async {
+  Future<InsertBacResponse> handleRawEvent(InsertBacRawData eventData) async {
     final queryResult =
         realm.query<BacSummary>("id == '${eventData.oldBac.matricule}${eventData.oldBac.anneeBac}'");
 
@@ -30,22 +30,22 @@ class InsertBacCommand
       });
     }
 
-    return insertBacResponse(messageId: eventData.messageId);
+    return InsertBacResponse(messageId: eventData.messageId);
   }
 }
 
-class insertBacData extends ServiceEventData<insertBacRawData> {
+class InsertBacData extends ServiceEventData<InsertBacRawData> {
   final BacSummary oldBac;
 
-  insertBacData({
+  InsertBacData({
     required this.oldBac,
    
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  insertBacRawData toRawServiceEventData() {
-    return insertBacRawData(
+  InsertBacRawData toRawServiceEventData() {
+    return InsertBacRawData(
       oldBac: oldBac,
       messageId: messageId,
       requesterId: requesterId,
@@ -55,11 +55,11 @@ class insertBacData extends ServiceEventData<insertBacRawData> {
   }
 }
 
-class insertBacRawData extends RawServiceEventData {
+class InsertBacRawData extends RawServiceEventData {
   final BacSummary oldBac;
 
 
-  insertBacRawData({
+  InsertBacRawData({
     required this.oldBac,
     required int messageId,
     required String requesterId,
@@ -67,10 +67,10 @@ class insertBacRawData extends RawServiceEventData {
   }) : super(messageId, requesterId, eventId);
 }
 
-class insertBacResponse extends ServiceEventResponse {
+class InsertBacResponse extends ServiceEventResponse {
   BacSummary? bac;
 
-  insertBacResponse({
+  InsertBacResponse({
     this.bac,
     required int messageId,
     ServiceEventResponseStatus responseType =

@@ -4,6 +4,7 @@ import 'package:progresswebtu/appState/state.dart' as bloc;
 import 'package:progresswebtu/constants/metadata.dart';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/core/navigator/feature.dart';
+import 'package:progresswebtu/core/splash/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:progresswebtu/widgets/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,7 @@ class LoginLogic {
     }
   }
 
-  void _sendLoginEvent(String username, String password) {
+  void _sendLoginEvent(String username, String password, [String? authToken]) {
     final service = ApiService.instance();
 
     final eventData =
@@ -35,14 +36,21 @@ class LoginLogic {
     service.onEventForCallback(event);
   }
 
-  Future<bool> connectWithSharedPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<bool> connectWithSharedPrefs(StoredDataState data) async {
+    final username = data.username;
+    final password = data.password;
+    final authToken = data.authToken;
+    final authTokenExpirationDate = data.authTokenExpirationDate;
 
-    final username = prefs.getString(AppMetadata.usernameSharedPrefKey) ?? '';
-    final password = prefs.getString(AppMetadata.passwordSharedPrefKey) ?? '';
-
+    final currentDate = DateTime.now();
+    final expirationDate = DateTime.parse(authTokenExpirationDate);
 
     if (username.isNotEmpty && password.isNotEmpty) {
+      if (currentDate.day != expirationDate.day) {
+        _sendLoginEvent(username, password, authToken);
+        return true;
+      }
+
       _sendLoginEvent(username, password);
     }
 

@@ -18,8 +18,10 @@ class SplashViewLogic {
 
     final username = prefs.getString(AppMetadata.usernameSharedPrefKey) ?? '';
     final password = prefs.getString(AppMetadata.passwordSharedPrefKey) ?? '';
+    final authToken = prefs.getString(AppMetadata.authTokenSharedPrefKey) ?? '';
+    final authTokenExpirationDate = prefs.getString(AppMetadata.authTokenExpirationSharedPrefKey) ?? '';
 
-    final storedData = StoredDataState(username, password, prefs);
+    final storedData = StoredDataState(username, password, authToken,authTokenExpirationDate);
 
     await SettingsController.instance.loadSettings();
 
@@ -34,9 +36,10 @@ class SplashViewLogic {
 class StoredDataState {
   final String username;
   final String password;
-  SharedPreferences? prefs;
+  final String authToken;
+  final String authTokenExpirationDate;
 
-  StoredDataState(this.username, this.password,[this.prefs]);
+  StoredDataState(this.username, this.password, this.authToken, this.authTokenExpirationDate,);
 
-  static defaultInstance() => StoredDataState('', '');
+  static defaultInstance() => StoredDataState('', '','', '');
 }

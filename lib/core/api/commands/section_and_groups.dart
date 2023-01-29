@@ -8,7 +8,9 @@ final String sectionEventName = Apis.sectionAndGroups.name;
 
 class SectionsAndGroupsCommand
     extends Command<SectionsEventData, SectionsRawEventData, SectionsResponse> {
-  SectionsAndGroupsCommand() : super(sectionEventId, sectionEventName);
+
+  final Map<String, String> _headers;
+  SectionsAndGroupsCommand([this._headers = const {}]) : super(sectionEventId, sectionEventName);
 
   @override
   Future<SectionsResponse> handleEvent(SectionsEventData eventData) {
@@ -24,11 +26,11 @@ class SectionsAndGroupsCommand
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;

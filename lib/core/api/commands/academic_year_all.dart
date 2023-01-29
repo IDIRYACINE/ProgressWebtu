@@ -8,7 +8,10 @@ final String allAcademicYearEventName = Apis.dias.name;
 
 class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
     AcademicYearAllRawEventData, AcademicYearAllResponse> {
-  AcademicYearAllCommand() : super(allAcademicYearEventId, allAcademicYearEventName);
+  final Map<String, String> _headers;
+
+  AcademicYearAllCommand([this._headers = const {}])
+      : super(allAcademicYearEventId, allAcademicYearEventName);
 
   @override
   Future<AcademicYearAllResponse> handleEvent(
@@ -26,11 +29,11 @@ class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
@@ -298,6 +301,7 @@ class AcademicYear {
   }
 }
 
-class AcademicYearEvent extends ServiceEvent<AcademicYearAllResponse>{
-  AcademicYearEvent({required super.eventData,super.callback}) : super(allAcademicYearEventId, allAcademicYearEventName, serviceId);
+class AcademicYearEvent extends ServiceEvent<AcademicYearAllResponse> {
+  AcademicYearEvent({required super.eventData, super.callback})
+      : super(allAcademicYearEventId, allAcademicYearEventName, serviceId);
 }

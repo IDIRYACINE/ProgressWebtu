@@ -8,7 +8,10 @@ final String examNotesEventName = Apis.currentAcademiqueYear.name;
 
 class CurrentAcademicYearCommand extends Command<CurrentAcademicYearEventData,
     CurrentAcademicYearRawEventData, CurrentAcademicYearResponse> {
-  CurrentAcademicYearCommand() : super(examNotesEventId, examNotesEventName);
+  final Map<String, String> _headers;
+
+  CurrentAcademicYearCommand([this._headers = const {}])
+      : super(examNotesEventId, examNotesEventName);
 
   @override
   Future<CurrentAcademicYearResponse> handleEvent(
@@ -27,11 +30,11 @@ class CurrentAcademicYearCommand extends Command<CurrentAcademicYearEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
-    final headers = {"authorization": eventData.authKey};
+    _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
-        .get(url, headers: headers)
+        .get(url, headers: _headers)
         .then((response) {
       try {
         final decodedResponse =
@@ -71,7 +74,7 @@ class CurrentAcademicYearEventData
   }) : super(requesterId);
 
   @override
-  CurrentAcademicYearRawEventData toRawServiceEventData( ) {
+  CurrentAcademicYearRawEventData toRawServiceEventData() {
     return CurrentAcademicYearRawEventData(
         authKey: authKey,
         bacYear: bacYear,
@@ -168,7 +171,8 @@ class CurrentAcademiqueYear {
   }
 }
 
-class CurrentAcademicYearEvent extends ServiceEvent<CurrentAcademicYearResponse>{
-  CurrentAcademicYearEvent({required super.eventData,super.callback})
+class CurrentAcademicYearEvent
+    extends ServiceEvent<CurrentAcademicYearResponse> {
+  CurrentAcademicYearEvent({required super.eventData, super.callback})
       : super(examNotesEventId, examNotesEventName, serviceId);
 }

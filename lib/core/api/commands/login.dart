@@ -8,7 +8,10 @@ final String loginEventName = Apis.authenticate.name;
 
 class LoginCommand
     extends Command<LoginEventData, LoginEventRawData, AuthEventResponse> {
-  LoginCommand() : super(loginEventId, loginEventName);
+
+  final Map<String, String> _headers;
+
+  LoginCommand([this._headers = const {}]) : super(loginEventId, loginEventName);
 
   @override
   Future<AuthEventResponse> handleEvent(LoginEventData eventData) async {
@@ -25,11 +28,12 @@ class LoginCommand
       LoginRequestKeys.username.name: eventData.username,
       LoginRequestKeys.password.name: eventData.password
     };
-    Map<String, String> headers = {"Content-Type": "application/json"};
+
+    _headers.putIfAbsent("Content-Type" , () => "application/json");
 
     return ApiService.instance()
         .client
-        .post(url, body: jsonEncode(body), headers: headers)
+        .post(url, body: jsonEncode(body), headers: _headers)
         .then((response) {
       try {
         final decodedResponse =
@@ -112,7 +116,7 @@ class LoginEventData extends ServiceEventData<LoginEventRawData> {
   }) : super(requesterId);
 
   @override
-  LoginEventRawData toRawServiceEventData( ) {
+  LoginEventRawData toRawServiceEventData() {
     return LoginEventRawData(
         username: username,
         password: password,
@@ -132,5 +136,6 @@ class AuthEventResponse extends ServiceEventResponse {
 }
 
 class LoginEvent extends ServiceEvent<AuthEventResponse> {
-  LoginEvent({required super.eventData,super.callback}) : super(loginEventId, loginEventName, serviceId);
+  LoginEvent({required super.eventData, super.callback})
+      : super(loginEventId, loginEventName, serviceId);
 }

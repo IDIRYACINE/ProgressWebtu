@@ -26,3 +26,9 @@ class UpdateAuthState extends AppEvent{
 
   UpdateAuthState(this.response);
 }
+
+class UpdateSections extends AppEvent {
+  final List<Section> response;
+
+  UpdateSections(this.response);
+}

@@ -46,6 +46,9 @@ class LoginLogic {
     final expirationDate = DateTime.parse(authTokenExpirationDate);
 
     if (username.isNotEmpty && password.isNotEmpty) {
+      _username = username;
+      _password = password;
+      
       if (currentDate.day != expirationDate.day) {
         _sendLoginEvent(username, password, authToken);
         return true;
@@ -75,16 +78,17 @@ class LoginLogic {
 
   Future<void> _onLoginSuccess(LoginResponse response) async {
     final prefs = await SharedPreferences.getInstance();
+   
     prefs.setString(AppMetadata.usernameSharedPrefKey, _username!);
     prefs.setString(AppMetadata.passwordSharedPrefKey, _password!);
     prefs.setString(AppMetadata.authTokenSharedPrefKey, response.token);
     prefs.setString(
         AppMetadata.authTokenExpirationSharedPrefKey, response.expirationDate);
 
-    BlocProvider.of<bloc.AppBloc>(formKey.currentContext!)
-        .add(bloc.UpdateAuthState(response));
+      BlocProvider.of<bloc.AppBloc>(formKey.currentContext!)
+          .add(bloc.UpdateAuthState(response));
 
-    AppNavigator.pushNamedReplacement(dashboardRoute);
+      AppNavigator.pushNamedReplacement(dashboardRoute);
   }
 
   void _onLoginFail() {

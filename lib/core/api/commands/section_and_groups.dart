@@ -8,9 +8,9 @@ final String sectionEventName = Apis.sectionAndGroups.name;
 
 class SectionsAndGroupsCommand
     extends Command<SectionsEventData, SectionsRawEventData, SectionsResponse> {
-
   final Map<String, String> _headers;
-  SectionsAndGroupsCommand([this._headers = const {}]) : super(sectionEventId, sectionEventName);
+  SectionsAndGroupsCommand([this._headers = const {}])
+      : super(sectionEventId, sectionEventName);
 
   @override
   Future<SectionsResponse> handleEvent(SectionsEventData eventData) {
@@ -40,7 +40,6 @@ class SectionsAndGroupsCommand
 
         return SectionsResponse(
             messageId: eventData.messageId, sections: sections);
-        
       } catch (e) {
         return SectionsResponse(
             status: ServiceEventResponseStatus.error,
@@ -64,7 +63,7 @@ class SectionsEventData extends ServiceEventData<SectionsRawEventData> {
   }) : super(requesterId);
 
   @override
-  SectionsRawEventData toRawServiceEventData( ) {
+  SectionsRawEventData toRawServiceEventData() {
     return SectionsRawEventData(
         authKey: authKey,
         bacYear: bacYear,
@@ -87,7 +86,7 @@ class SectionsRawEventData extends RawServiceEventData {
       required this.authKey,
       required int messageId,
       required String requesterId})
-      : super(messageId, requesterId, Apis.sectionAndGroups.index);
+      : super(messageId, requesterId, sectionEventId);
 }
 
 class SectionsResponse extends ServiceEventResponse {
@@ -133,18 +132,19 @@ class Section {
 
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
-      dateAffectation: json[SectionKey.dateAffectation.name],
-      groupePedagogiqueId: json[SectionKey.groupePedagogiqueId.name],
-      id: json[SectionKey.id.name],
-      nomGroupePedagogique: json[SectionKey.nomGroupePedagogique.name],
-      nomSection: json[SectionKey.nomSection.name],
-      periodeCode: json[SectionKey.periodeCode.name],
-      periodeId: json[SectionKey.periodeId.name],
-      periodeLibelleLongLt: json[SectionKey.periodeLibelleLongLt.name],
+      dateAffectation: json[SectionKey.dateAffectation.name] ?? "",
+      groupePedagogiqueId: json[SectionKey.groupePedagogiqueId.name] ?? 0,
+      id: json[SectionKey.id.name] ?? 0,
+      nomGroupePedagogique: json[SectionKey.nomGroupePedagogique.name] ?? "",
+      nomSection: json[SectionKey.nomSection.name] ?? "",
+      periodeCode: json[SectionKey.periodeCode.name] ?? "",
+      periodeId: json[SectionKey.periodeId.name] ?? 0,
+      periodeLibelleLongLt: json[SectionKey.periodeLibelleLongLt.name] ?? "",
     );
   }
 }
 
 class GroupSectionEvent extends ServiceEvent<SectionsResponse> {
-  GroupSectionEvent({required super.eventData,super.callback}) : super(sectionEventId, sectionEventName, serviceId);
+  GroupSectionEvent({required super.eventData, super.callback})
+      : super(sectionEventId, sectionEventName, serviceId);
 }

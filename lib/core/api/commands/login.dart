@@ -83,12 +83,12 @@ class LoginResponse {
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
-      etablissementId: json[LoginResponseKeys.etablissementId.name],
-      expirationDate: json[LoginResponseKeys.expirationDate.name],
-      idIndividu: json[LoginResponseKeys.idIndividu.name],
-      token: json[LoginResponseKeys.token.name],
-      userId: json[LoginResponseKeys.userId.name],
-      userName: json[LoginResponseKeys.userName.name],
+      etablissementId: json[LoginResponseKeys.etablissementId.name] ?? 0,
+      expirationDate: json[LoginResponseKeys.expirationDate.name] ?? "",
+      idIndividu: json[LoginResponseKeys.idIndividu.name] ?? 0,
+      token: json[LoginResponseKeys.token.name] ?? "",
+      userId: json[LoginResponseKeys.userId.name] ?? 0,
+      userName: json[LoginResponseKeys.userName.name] ?? "",
     );
   }
 }
@@ -102,7 +102,7 @@ class LoginEventRawData extends RawServiceEventData {
       required this.password,
       required int messageId,
       required String requesterId})
-      : super(messageId, requesterId, Apis.authenticate.index);
+      : super(messageId, requesterId, loginEventId);
 }
 
 class LoginEventData extends ServiceEventData<LoginEventRawData> {

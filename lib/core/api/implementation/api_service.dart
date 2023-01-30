@@ -1,4 +1,5 @@
 import 'package:progresswebtu/core/api/commands/commands.dart';
+import 'package:progresswebtu/core/api/commands/section_and_groups.dart';
 import 'package:progresswebtu/core/api/implementation/apis.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:http/http.dart' as http;
@@ -61,6 +62,8 @@ class ApiService extends Service {
         SemestreSummaryCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
         AllSessionsBilansCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        SectionsAndGroupsCommand(isTestMode ? postmanTestHeader : {}));
   }
 
   @override
@@ -74,21 +77,21 @@ class ApiService extends Service {
   }
 
   @override
-  Future<ServiceEventResponse> onRawEvent(RawServiceEventData event) {
+  Future<ServiceEventResponse> onRawEvent(RawServiceEventData event) async{
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
       return command.handleRawEvent(event);
     }
-    return Future.value(UnhandeledEventResponse(event.messageId));
+    return UnhandeledEventResponse(event.messageId);
   }
 
   @override
   Future<ServiceEventResponse> onEventForResponse(
-      ServiceEvent<ServiceEventResponse> event) {
+      ServiceEvent<ServiceEventResponse> event) async{
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
       return command.handleEvent(event.eventData);
     }
-    return Future.value(UnhandeledEventResponse(event.eventData.messageId));
+    return UnhandeledEventResponse(event.eventData.messageId);
   }
 }

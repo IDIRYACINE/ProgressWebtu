@@ -4,17 +4,23 @@ enum StateStatus { loading, ready }
 
 class AppState {
   const AppState({
+    required this.sectionsState,
     required this.authState,
     required this.bacSummaryState,
   });
 
   final AuthState authState;
   final BacSummaryState bacSummaryState;
+  final SectionState sectionsState;
 
-  AppState copyWith({AuthState? authState, BacSummaryState? bacSummaryState}) {
+  AppState copyWith(
+      {AuthState? authState,
+      BacSummaryState? bacSummaryState,
+      SectionState? sectionsState}) {
     return AppState(
       bacSummaryState: bacSummaryState ?? this.bacSummaryState,
       authState: authState ?? this.authState,
+      sectionsState: sectionsState ?? this.sectionsState,
     );
   }
 
@@ -22,7 +28,73 @@ class AppState {
     return AppState(
       authState: AuthState.defaultState(),
       bacSummaryState: BacSummaryState.defaultState(),
+      sectionsState: SectionState.defaultState(),
     );
+  }
+}
+
+class SectionState {
+  final StateStatus stateStatus;
+  final List<SectionModel> sections;
+
+  SectionState({required this.stateStatus, required this.sections});
+
+  SectionState copyWith(
+      {StateStatus? stateStatus, List<SectionModel>? sections}) {
+    return SectionState(
+      stateStatus: stateStatus ?? this.stateStatus,
+      sections: sections ?? this.sections,
+    );
+  }
+
+  factory SectionState.defaultState() {
+    return SectionState(
+      stateStatus: StateStatus.loading,
+      sections: [],
+    );
+  }
+
+  factory SectionState.fromSectionResponse(List<Section> response) {
+    final sections =
+        response.map((e) => SectionModel.fromSectionApi(e)).toList();
+
+    return SectionState(
+      stateStatus: StateStatus.ready,
+      sections: sections,
+    );
+  }
+}
+
+class SectionModel {
+  final String dateAffectation;
+  final int groupePedagogiqueId;
+  final int id;
+  final String nomGroupePedagogique;
+  final String nomSection;
+  final String periodeCode;
+  final int periodeId;
+  final String periodeLibelleLongLt;
+
+  SectionModel(
+      {required this.dateAffectation,
+      required this.groupePedagogiqueId,
+      required this.id,
+      required this.nomGroupePedagogique,
+      required this.nomSection,
+      required this.periodeCode,
+      required this.periodeId,
+      required this.periodeLibelleLongLt});
+
+  factory SectionModel.fromSectionApi(Section apiSection) {
+    return SectionModel(
+        dateAffectation: apiSection.dateAffectation,
+        groupePedagogiqueId: apiSection.groupePedagogiqueId,
+        id: apiSection.id,
+        nomGroupePedagogique: apiSection.nomGroupePedagogique,
+        nomSection: apiSection.nomSection,
+        periodeCode: apiSection.periodeCode,
+        periodeId: apiSection.periodeId,
+        periodeLibelleLongLt: apiSection.periodeLibelleLongLt);
   }
 }
 

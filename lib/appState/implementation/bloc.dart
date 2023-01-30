@@ -13,6 +13,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<LoginEvent>(_login);
     on<LogoutEvent>(_logout);
     on<UpdateBacSummary>(_updateBacSummary);
+    on<UpdateSections>(_updateSections);
     on<UpdateAuthState>(_updateAuthState);
   }
 
@@ -39,4 +40,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     emit(state.copyWith(authState: newAuthState));
   }
   
+
+  FutureOr<void> _updateSections(UpdateSections event, Emitter<AppState> emit) {
+    SectionState newSectionState = SectionState.fromSectionResponse(event.response);
+    emit(state.copyWith(sectionsState: newSectionState));
+  }
 }

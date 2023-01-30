@@ -16,7 +16,8 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
       : super(allSessionsEventId, allSessionsEventName);
 
   @override
-  Future<AllSessionsBilansResponse> handleEvent(AllSessionsBilansEventData eventData) {
+  Future<AllSessionsBilansResponse> handleEvent(
+      AllSessionsBilansEventData eventData) {
     return handleRawEvent(eventData.toRawServiceEventData());
   }
 
@@ -39,12 +40,17 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
-        List<SessionBilan> allSessionsBilans = decodedResponse
-            .map((e) => SessionBilan.fromJson(e as Map<String, dynamic>))
-            .toList();
+        List<SessionBilan> allSessionsBilans = [];
+
+        for (Map<String, dynamic> sessionBilan in decodedResponse) {
+          if (sessionBilan[SessionBilanKey.annuel.name] == false) {
+            allSessionsBilans.add(SessionBilan.fromJson(sessionBilan));
+          }
+        }
 
         return AllSessionsBilansResponse(
-            messageId: eventData.messageId, allSessionsBilans: allSessionsBilans);
+            messageId: eventData.messageId,
+            allSessionsBilans: allSessionsBilans);
       } catch (e) {
         return AllSessionsBilansResponse(
             status: ServiceEventResponseStatus.error,
@@ -54,7 +60,8 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
   }
 }
 
-class AllSessionsBilansEventData extends ServiceEventData<AllSessionsBilansRawEventData> {
+class AllSessionsBilansEventData
+    extends ServiceEventData<AllSessionsBilansRawEventData> {
   final String studyLevel;
   final String formationId;
 
@@ -101,9 +108,6 @@ class AllSessionsBilansResponse extends ServiceEventResponse {
     ServiceEventResponseStatus status = ServiceEventResponseStatus.success,
   }) : super(messageId, status);
 }
-
-
-
 
 class AllSessionsBilanEvent extends ServiceEvent<AllSessionsBilansResponse> {
   AllSessionsBilanEvent({required super.eventData, super.callback})

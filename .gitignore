@@ -52,3 +52,4 @@ pubspec.lock
 lib/core/api/implementation/apis.dart
 lib/core/api/implementation/api_responses.dart
 pubspec.lock
+test/data/*.json

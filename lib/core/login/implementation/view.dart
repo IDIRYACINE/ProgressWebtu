@@ -23,16 +23,15 @@ class LoginView extends StatelessWidget {
     return Material(
       child: Container(
         color: theme.scaffoldBackgroundColor,
-        child: FutureBuilder(
-            future: logic.connectWithSharedPrefs(data),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const ProgresBannerLabel();
-              }
-
-              return Form(
-                key: logic.formKey,
-                child: Padding(
+        child: Form(
+          key: logic.formKey,
+          child: FutureBuilder(
+              future: logic.connectWithSharedPrefs(data),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const ProgresBannerLabel();
+                }
+                return Padding(
                   padding: const EdgeInsets.all(AppMeasures.bodyPaddings),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -58,9 +57,9 @@ class LoginView extends StatelessWidget {
                       ConnectButton(onPressed: () => logic.connect())
                     ],
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+        ),
       ),
     );
   }

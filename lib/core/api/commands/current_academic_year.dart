@@ -3,15 +3,15 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
-final int examNotesEventId = Apis.currentAcademiqueYear.index;
-final String examNotesEventName = Apis.currentAcademiqueYear.name;
+final int currentAcademicYearEventId = Apis.currentAcademiqueYear.index;
+final String currentAcademicYearEventName = Apis.currentAcademiqueYear.name;
 
 class CurrentAcademicYearCommand extends Command<CurrentAcademicYearEventData,
     CurrentAcademicYearRawEventData, CurrentAcademicYearResponse> {
   final Map<String, String> _headers;
 
   CurrentAcademicYearCommand([this._headers = const {}])
-      : super(examNotesEventId, examNotesEventName);
+      : super(currentAcademicYearEventId, currentAcademicYearEventName);
 
   @override
   Future<CurrentAcademicYearResponse> handleEvent(
@@ -174,5 +174,5 @@ class CurrentAcademiqueYear {
 class CurrentAcademicYearEvent
     extends ServiceEvent<CurrentAcademicYearResponse> {
   CurrentAcademicYearEvent({required super.eventData, super.callback})
-      : super(examNotesEventId, examNotesEventName, serviceId);
+      : super(currentAcademicYearEventId, currentAcademicYearEventName, serviceId);
 }

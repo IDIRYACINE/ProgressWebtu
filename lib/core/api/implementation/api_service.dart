@@ -1,11 +1,4 @@
-import 'package:progresswebtu/core/api/commands/academic_year_all.dart';
-import 'package:progresswebtu/core/api/commands/bac_notes.dart';
-import 'package:progresswebtu/core/api/commands/bac_summary.dart';
-import 'package:progresswebtu/core/api/commands/current_academic_year.dart';
-import 'package:progresswebtu/core/api/commands/exam_notes.dart';
-import 'package:progresswebtu/core/api/commands/exam_session.dart';
-import 'package:progresswebtu/core/api/commands/login.dart';
-import 'package:progresswebtu/core/api/commands/semestre_summary.dart';
+import 'package:progresswebtu/core/api/commands/commands.dart';
 import 'package:progresswebtu/core/api/implementation/apis.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:http/http.dart' as http;
@@ -66,6 +59,8 @@ class ApiService extends Service {
         ExamSessionsCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
         SemestreSummaryCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        AllSessionsBilansCommand(isTestMode ? postmanTestHeader : {}));
   }
 
   @override

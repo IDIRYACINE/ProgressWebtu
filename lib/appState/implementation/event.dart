@@ -32,3 +32,9 @@ class UpdateSections extends AppEvent {
 
   UpdateSections(this.response);
 }
+
+class UpdateExamNotes extends AppEvent {
+  final List<ExamNote> response;
+
+  UpdateExamNotes(this.response);
+}

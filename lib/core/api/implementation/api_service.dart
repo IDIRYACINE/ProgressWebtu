@@ -55,7 +55,7 @@ class ApiService extends Service {
     replaceCommandAtIndex(
         CurrentAcademicYearCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
-        AcademicYearAllCommand(isTestMode ? postmanTestHeader : {}));
+        StudentCardCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
         ExamSessionsCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
@@ -64,6 +64,8 @@ class ApiService extends Service {
         AllSessionsBilansCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
         SectionsAndGroupsCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(
+        StudentCardCommand(isTestMode ? postmanTestHeader : {}));
   }
 
   @override
@@ -77,7 +79,7 @@ class ApiService extends Service {
   }
 
   @override
-  Future<ServiceEventResponse> onRawEvent(RawServiceEventData event) async{
+  Future<ServiceEventResponse> onRawEvent(RawServiceEventData event) async {
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
       return command.handleRawEvent(event);
@@ -87,7 +89,7 @@ class ApiService extends Service {
 
   @override
   Future<ServiceEventResponse> onEventForResponse(
-      ServiceEvent<ServiceEventResponse> event) async{
+      ServiceEvent<ServiceEventResponse> event) async {
     Command? command = searchAlgorithm.search(commands, event.eventId);
     if (command != null) {
       return command.handleEvent(event.eventData);

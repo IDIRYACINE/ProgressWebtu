@@ -6,23 +6,23 @@ import 'package:progresswebtu/utility/serviceStore/service.dart';
 final int allAcademicYearEventId = Apis.dias.index;
 final String allAcademicYearEventName = Apis.dias.name;
 
-class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
-    AcademicYearAllRawEventData, AcademicYearAllResponse> {
+class StudentCardCommand extends Command<StudentCardEventData,
+    StudentCardRawEventData, StudentCardResponse> {
   final Map<String, String> _headers;
 
-  AcademicYearAllCommand([this._headers = const {}])
+  StudentCardCommand([this._headers = const {}])
       : super(allAcademicYearEventId, allAcademicYearEventName);
 
   @override
-  Future<AcademicYearAllResponse> handleEvent(
-      AcademicYearAllEventData eventData) {
+  Future<StudentCardResponse> handleEvent(
+      StudentCardEventData eventData) {
     return handleRawEvent(eventData.toRawServiceEventData());
   }
 
   @override
-  Future<AcademicYearAllResponse> handleRawEvent(
-      AcademicYearAllRawEventData eventData) {
-    Api api = AllAcademicYearsApi();
+  Future<StudentCardResponse> handleRawEvent(
+      StudentCardRawEventData eventData) {
+    Api api = StudentCardApi();
 
     String apiUrl = api.url.replaceAll(usernameToken, eventData.username);
     apiUrl = apiUrl.replaceAll(bacYearToken, eventData.bacYear);
@@ -37,16 +37,14 @@ class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
-        List<AcademicYear> academicYears = decodedResponse
-            .map((e) => AcademicYear.fromJson(e as Map<String, dynamic>))
+        List<StudentCardSection> academicYears = decodedResponse
+            .map((e) => StudentCardSection.fromJson(e as Map<String, dynamic>))
             .toList();
 
-        AcademicYearAllResponse academicYearAllResponse =
-            AcademicYearAllResponse(
-                messageId: eventData.messageId, academicYearAll: academicYears);
-        return academicYearAllResponse;
+        return   StudentCardResponse(
+                messageId: eventData.messageId, studentCard: academicYears);
       } catch (e) {
-        return AcademicYearAllResponse(
+        return StudentCardResponse(
             status: ServiceEventResponseStatus.error,
             messageId: eventData.messageId);
       }
@@ -54,14 +52,14 @@ class AcademicYearAllCommand extends Command<AcademicYearAllEventData,
   }
 }
 
-class AcademicYearAllEventData
-    extends ServiceEventData<AcademicYearAllRawEventData> {
+class StudentCardEventData
+    extends ServiceEventData<StudentCardRawEventData> {
   final String username;
 
   final String bacYear;
 
   final String authKey;
-  AcademicYearAllEventData({
+  StudentCardEventData({
     required this.username,
     required this.bacYear,
     required this.authKey,
@@ -69,8 +67,8 @@ class AcademicYearAllEventData
   }) : super(requesterId);
 
   @override
-  AcademicYearAllRawEventData toRawServiceEventData() {
-    return AcademicYearAllRawEventData(
+  StudentCardRawEventData toRawServiceEventData() {
+    return StudentCardRawEventData(
         authKey: authKey,
         bacYear: bacYear,
         username: username,
@@ -79,14 +77,14 @@ class AcademicYearAllEventData
   }
 }
 
-class AcademicYearAllRawEventData extends RawServiceEventData {
+class StudentCardRawEventData extends RawServiceEventData {
   final String username;
 
   final String bacYear;
 
   final String authKey;
 
-  AcademicYearAllRawEventData(
+  StudentCardRawEventData(
       {required this.username,
       required this.bacYear,
       required this.authKey,
@@ -95,17 +93,17 @@ class AcademicYearAllRawEventData extends RawServiceEventData {
       : super(messageId, requesterId, Apis.dias.index);
 }
 
-class AcademicYearAllResponse extends ServiceEventResponse {
-  final List<AcademicYear>? academicYearAll;
+class StudentCardResponse extends ServiceEventResponse {
+  final List<StudentCardSection>? studentCard;
 
-  AcademicYearAllResponse({
-    this.academicYearAll,
+  StudentCardResponse({
+    this.studentCard,
     required int messageId,
     ServiceEventResponseStatus status = ServiceEventResponseStatus.success,
   }) : super(messageId, status);
 }
 
-enum AcademicYearKey {
+enum CardSectionKey {
   anneeAcademiqueCode,
   anneeAcademiqueId,
   cycleCode,
@@ -153,7 +151,7 @@ enum AcademicYearKey {
   refLibelleCycleAr,
 }
 
-class AcademicYear {
+class StudentCardSection {
   final String anneeAcademiqueCode;
   final int anneeAcademiqueId;
   final String cycleCode;
@@ -200,7 +198,7 @@ class AcademicYear {
   final String refLibelleCycle;
   final String refLibelleCycleAr;
 
-  AcademicYear({
+  StudentCardSection({
     required this.anneeAcademiqueCode,
     required this.anneeAcademiqueId,
     required this.cycleCode,
@@ -248,60 +246,62 @@ class AcademicYear {
     required this.refCodeCycle,
   });
 
-  factory AcademicYear.fromJson(Map<String, dynamic> json) {
-    return AcademicYear(
-      anneeAcademiqueCode: json[AcademicYearKey.anneeAcademiqueCode.name],
-      anneeAcademiqueId: json[AcademicYearKey.anneeAcademiqueId.name],
-      cycleCode: json[AcademicYearKey.cycleCode.name],
-      cycleId: json[AcademicYearKey.cycleId.name],
-      cycleLibelleLongLt: json[AcademicYearKey.cycleLibelleLongLt.name],
-      dossierEtudiantId: json[AcademicYearKey.dossierEtudiantId.name],
-      id: json[AcademicYearKey.id.name],
-      individuDateNaissance: json[AcademicYearKey.individuDateNaissance.name],
-      individuId: json[AcademicYearKey.individuId.name],
-      individuLieuNaissance: json[AcademicYearKey.individuLieuNaissance.name],
+  factory StudentCardSection.fromJson(Map<String, dynamic> json) {
+    return StudentCardSection(
+      anneeAcademiqueCode: json[CardSectionKey.anneeAcademiqueCode.name] ?? '',
+      anneeAcademiqueId: json[CardSectionKey.anneeAcademiqueId.name] ?? 0,
+      cycleCode: json[CardSectionKey.cycleCode.name] ?? '',
+      cycleId: json[CardSectionKey.cycleId.name] ?? 0,
+      cycleLibelleLongLt: json[CardSectionKey.cycleLibelleLongLt.name] ?? '',
+      dossierEtudiantId: json[CardSectionKey.dossierEtudiantId.name] ?? 0,
+      id: json[CardSectionKey.id.name] ?? 0,
+      individuDateNaissance: DateTime.tryParse(json[CardSectionKey.individuDateNaissance.name]) ??
+          DateTime.now(),
+
+      individuId: json[CardSectionKey.individuId.name] ?? 0,
+      individuLieuNaissance: json[CardSectionKey.individuLieuNaissance.name] ?? '',
       individuLieuNaissanceArabe:
-          json[AcademicYearKey.individuLieuNaissanceArabe.name],
-      individuNomArabe: json[AcademicYearKey.individuNomArabe.name],
-      individuNomLatin: json[AcademicYearKey.individuNomLatin.name],
-      individuPrenomArabe: json[AcademicYearKey.individuPrenomArabe.name],
-      individuPrenomLatin: json[AcademicYearKey.individuPrenomLatin.name],
-      lastMoyenne: json[AcademicYearKey.lastMoyenne.name],
-      llEtablissementArabe: json[AcademicYearKey.llEtablissementArabe.name],
-      llEtablissementLatin: json[AcademicYearKey.llEtablissementLatin.name],
-      moyenneBac: json[AcademicYearKey.moyenneBac.name],
-      nin: json[AcademicYearKey.nin.name],
-      niveauCode: json[AcademicYearKey.niveauCode.name],
-      niveauId: json[AcademicYearKey.niveauId.name],
-      niveauLibelleLongAr: json[AcademicYearKey.niveauLibelleLongAr.name],
-      niveauLibelleLongLt: json[AcademicYearKey.niveauLibelleLongLt.name],
-      niveauRang: json[AcademicYearKey.niveauRang.name],
-      numeroInscription: json[AcademicYearKey.numeroInscription.name],
-      numeroMatricule: json[AcademicYearKey.numeroMatricule.name],
-      ofCodeDomaine: json[AcademicYearKey.ofCodeDomaine.name],
-      ofCodeFiliere: json[AcademicYearKey.ofCodeFiliere.name],
-      ofCodeSpecialite: json[AcademicYearKey.ofCodeSpecialite.name],
-      ofIdDomaine: json[AcademicYearKey.ofIdDomaine.name],
-      ofIdFiliere: json[AcademicYearKey.ofIdFiliere.name],
-      ofIdSpecialite: json[AcademicYearKey.ofIdSpecialite.name],
-      ofLlDomaine: json[AcademicYearKey.ofLlDomaine.name],
-      ofLlDomaineArabe: json[AcademicYearKey.ofLlDomaineArabe.name],
-      ofLlFiliere: json[AcademicYearKey.ofLlFiliere.name],
-      ofLlFiliereArabe: json[AcademicYearKey.ofLlFiliereArabe.name],
-      ofLlSpecialite: json[AcademicYearKey.ofLlSpecialite.name],
-      ofLlSpecialiteArabe: json[AcademicYearKey.ofLlSpecialiteArabe.name],
+          json[CardSectionKey.individuLieuNaissanceArabe.name] ?? '',
+      individuNomArabe: json[CardSectionKey.individuNomArabe.name] ?? '',
+      individuNomLatin: json[CardSectionKey.individuNomLatin.name] ?? '',
+      individuPrenomArabe: json[CardSectionKey.individuPrenomArabe.name] ?? '',
+      individuPrenomLatin: json[CardSectionKey.individuPrenomLatin.name] ?? '',
+      lastMoyenne: json[CardSectionKey.lastMoyenne.name],
+      llEtablissementArabe: json[CardSectionKey.llEtablissementArabe.name] ?? '',
+      llEtablissementLatin: json[CardSectionKey.llEtablissementLatin.name] ?? '',
+      moyenneBac: json[CardSectionKey.moyenneBac.name] ?? 0.0,
+      nin: json[CardSectionKey.nin.name] ?? '',
+      niveauCode: json[CardSectionKey.niveauCode.name] ?? '',
+      niveauId: json[CardSectionKey.niveauId.name] ?? 0,
+      niveauLibelleLongAr: json[CardSectionKey.niveauLibelleLongAr.name] ?? '',
+      niveauLibelleLongLt: json[CardSectionKey.niveauLibelleLongLt.name] ?? '',
+      niveauRang: json[CardSectionKey.niveauRang.name] ?? 0,
+      numeroInscription: json[CardSectionKey.numeroInscription.name] ?? '',
+      numeroMatricule: json[CardSectionKey.numeroMatricule.name] ?? '',
+      ofCodeDomaine: json[CardSectionKey.ofCodeDomaine.name] ?? '',
+      ofCodeFiliere: json[CardSectionKey.ofCodeFiliere.name] ?? '',
+      ofCodeSpecialite: json[CardSectionKey.ofCodeSpecialite.name] ?? '',
+      ofIdDomaine: json[CardSectionKey.ofIdDomaine.name] ?? 0,
+      ofIdFiliere: json[CardSectionKey.ofIdFiliere.name] ?? 0,
+      ofIdSpecialite: json[CardSectionKey.ofIdSpecialite.name] ?? 0,
+      ofLlDomaine: json[CardSectionKey.ofLlDomaine.name],
+      ofLlDomaineArabe: json[CardSectionKey.ofLlDomaineArabe.name] ?? '',
+      ofLlFiliere: json[CardSectionKey.ofLlFiliere.name],
+      ofLlFiliereArabe: json[CardSectionKey.ofLlFiliereArabe.name] ?? '',
+      ofLlSpecialite: json[CardSectionKey.ofLlSpecialite.name] ?? '',
+      ofLlSpecialiteArabe: json[CardSectionKey.ofLlSpecialiteArabe.name] ?? '',
       ouvertureOffreFormationId:
-          json[AcademicYearKey.ouvertureOffreFormationId.name],
-      photo: json[AcademicYearKey.photo.name],
-      refCodeEtablissement: json[AcademicYearKey.refCodeEtablissement.name],
-      refLibelleCycle: json[AcademicYearKey.refLibelleCycle.name],
-      refLibelleCycleAr: json[AcademicYearKey.refLibelleCycleAr.name],
-      refCodeCycle: json[AcademicYearKey.refCodeCycle.name],
+          json[CardSectionKey.ouvertureOffreFormationId.name],
+      photo: json[CardSectionKey.photo.name] ?? '',
+      refCodeEtablissement: json[CardSectionKey.refCodeEtablissement.name] ?? '',
+      refLibelleCycle: json[CardSectionKey.refLibelleCycle.name] ?? '',
+      refLibelleCycleAr: json[CardSectionKey.refLibelleCycleAr.name] ?? '',
+      refCodeCycle: json[CardSectionKey.refCodeCycle.name] ?? '',
     );
   }
 }
 
-class AcademicYearEvent extends ServiceEvent<AcademicYearAllResponse> {
+class AcademicYearEvent extends ServiceEvent<StudentCardResponse> {
   AcademicYearEvent({required super.eventData, super.callback})
       : super(allAcademicYearEventId, allAcademicYearEventName, serviceId);
 }

@@ -7,11 +7,11 @@ import '../data/loader.dart';
 void main() {
   
 
-  test('Deserializae', () async {
+  test('Deserializae Section Api Response', () async {
     
-  final jsonData = loadJsonFileContent("sections_api_response.json");
+  final jsonData = loadJsonFileContent("api_response_sections.json");
   
-  final sections = jsonData.map((e) => Section.fromJson(e)).toList();
+  final List<Section> sections = jsonData.map((e) => Section.fromJson(e)).toList();
 
   assert(sections.length == 2 , "Should have 2 sections");
   });

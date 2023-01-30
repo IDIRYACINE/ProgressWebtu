@@ -22,7 +22,7 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
   Future<ExamNotesResponse> handleRawEvent(ExamNotesRawEventData eventData) {
     Api api = ExamsNotesApi();
 
-    String apiUrl = api.url.replaceAll(studentIdToken, eventData.studentId);
+    String apiUrl = api.url.replaceAll(studentIdToken, eventData.studyLevel);
 
     Uri url = Uri.https(host, apiUrl);
 
@@ -63,19 +63,19 @@ class ExamNotesEventData extends ServiceEventData<ExamNotesRawEventData> {
   ExamNotesRawEventData toRawServiceEventData( ) {
     return ExamNotesRawEventData(
         authKey: authKey,
-        studentId: studyLevel,
+        studyLevel: studyLevel,
         messageId: messageId,
         requesterId: requesterId);
   }
 }
 
 class ExamNotesRawEventData extends RawServiceEventData {
-  final String studentId;
+  final String studyLevel;
 
   final String authKey;
 
   ExamNotesRawEventData(
-      {required this.studentId,
+      {required this.studyLevel,
       required this.authKey,
       required int messageId,
       required String requesterId})
@@ -142,12 +142,12 @@ class ExamNote {
   final bool oldCopieNonRemise;
   final int planningSessionId;
   final String planningSessionIntitule;
-  final double rattachementMcCoefficient;
-  final double rattachementMcCredit;
+  final int rattachementMcCoefficient;
+  final int rattachementMcCredit;
   final int rattachementMcId;
   final bool readerByJury;
   final bool subscribed;
-  final double totalCoefficient;
+  final int totalCoefficient;
   final String ueCode;
   final String ueNatureLlFr;
 
@@ -194,8 +194,8 @@ class ExamNote {
       idPeriode: json[ExamNoteKey.idPeriode.name],
       mcLibelleFr: json[ExamNoteKey.mcLibelleFr.name],
       modifiableByJury: json[ExamNoteKey.modifiableByJury.name],
-      moyenneGenerale: json[ExamNoteKey.moyenneGenerale.name],
-      noteEliminatoire: json[ExamNoteKey.noteEliminatoire.name],
+      moyenneGenerale: (json[ExamNoteKey.moyenneGenerale.name] as int).toDouble() ,
+      noteEliminatoire: (json[ExamNoteKey.noteEliminatoire.name]as int).toDouble(),
       noteObtenu: json[ExamNoteKey.noteObtenu.name],
       oldAbsenceJustifie: json[ExamNoteKey.oldAbsenceJustifie.name],
       oldAbsent: json[ExamNoteKey.oldAbsent.name],

@@ -1,26 +1,36 @@
 import 'package:progresswebtu/core/api/feature.dart';
 
+import '../models/models.dart';
+
 enum StateStatus { loading, ready }
 
 class AppState {
   const AppState({
+    required this.examNotes,
     required this.sectionsState,
     required this.authState,
     required this.bacSummaryState,
+    required this.studentCardState,
   });
 
   final AuthState authState;
   final BacSummaryState bacSummaryState;
   final SectionState sectionsState;
+  final ExamsNotesState examNotes;
+  final StudentCardState studentCardState;
 
   AppState copyWith(
       {AuthState? authState,
       BacSummaryState? bacSummaryState,
-      SectionState? sectionsState}) {
+      SectionState? sectionsState,
+      StudentCardState? studentCardState,
+      ExamsNotesState? examNotes}) {
     return AppState(
       bacSummaryState: bacSummaryState ?? this.bacSummaryState,
       authState: authState ?? this.authState,
       sectionsState: sectionsState ?? this.sectionsState,
+      examNotes: examNotes ?? this.examNotes,
+      studentCardState: studentCardState ?? this.studentCardState,
     );
   }
 
@@ -29,7 +39,43 @@ class AppState {
       authState: AuthState.defaultState(),
       bacSummaryState: BacSummaryState.defaultState(),
       sectionsState: SectionState.defaultState(),
+      examNotes: ExamsNotesState.defaultState(),
+      studentCardState: StudentCardState.defaultState(),
     );
+  }
+}
+
+class StudentCardState {
+  final StateStatus stateStatus;
+
+  final List<StudentCardModel> studentCardSections;
+
+  StudentCardState(this.stateStatus, this.studentCardSections);
+
+  factory StudentCardState.defaultState() {
+    return StudentCardState(StateStatus.loading, []);
+  }
+
+  factory StudentCardState.fromStudentCardResponse(
+      List<StudentCardSection> response) {
+    final studentCardSections =
+        response.map((e) => StudentCardModel.fromApiResponse(e)).toList();
+
+    return StudentCardState(
+      StateStatus.ready,
+      studentCardSections,
+    );
+  }
+}
+
+class ExamsNotesState {
+  final StateStatus stateStatus;
+  final List<ExamsNoteModel> examResults;
+
+  ExamsNotesState(this.stateStatus, this.examResults);
+
+  factory ExamsNotesState.defaultState() {
+    return ExamsNotesState(StateStatus.loading, []);
   }
 }
 
@@ -62,39 +108,6 @@ class SectionState {
       stateStatus: StateStatus.ready,
       sections: sections,
     );
-  }
-}
-
-class SectionModel {
-  final String dateAffectation;
-  final int groupePedagogiqueId;
-  final int id;
-  final String nomGroupePedagogique;
-  final String nomSection;
-  final String periodeCode;
-  final int periodeId;
-  final String periodeLibelleLongLt;
-
-  SectionModel(
-      {required this.dateAffectation,
-      required this.groupePedagogiqueId,
-      required this.id,
-      required this.nomGroupePedagogique,
-      required this.nomSection,
-      required this.periodeCode,
-      required this.periodeId,
-      required this.periodeLibelleLongLt});
-
-  factory SectionModel.fromSectionApi(Section apiSection) {
-    return SectionModel(
-        dateAffectation: apiSection.dateAffectation,
-        groupePedagogiqueId: apiSection.groupePedagogiqueId,
-        id: apiSection.id,
-        nomGroupePedagogique: apiSection.nomGroupePedagogique,
-        nomSection: apiSection.nomSection,
-        periodeCode: apiSection.periodeCode,
-        periodeId: apiSection.periodeId,
-        periodeLibelleLongLt: apiSection.periodeLibelleLongLt);
   }
 }
 

@@ -1,4 +1,4 @@
-export 'academic_year_all.dart';
+export 'student_card.dart';
 export 'allSessionsBilans/all_sessions_bilans.dart';
 export 'bac_notes.dart';
 export 'bac_summary.dart';

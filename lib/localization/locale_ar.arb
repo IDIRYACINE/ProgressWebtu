@@ -182,5 +182,6 @@
     "rang": "رتبة",
     "rangNiveau": "رتبة المستوى",
     "refCodePeriode": "مرجع كود الفترة",
-    "refCodePeriodicite": "مرجع كود التدويرية"
+    "refCodePeriodicite": "مرجع كود التدويرية",
+    "studentCard": "بطاقة الطالب"
 }

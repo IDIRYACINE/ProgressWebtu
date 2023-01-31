@@ -29,6 +29,7 @@ class ExamsNoteModel {
   final int totalCoefficient;
   final String ueCode;
   final String ueNatureLlFr;
+  final double examNote;
 
   ExamsNoteModel({
     required this.absenceJustifie,
@@ -58,6 +59,7 @@ class ExamsNoteModel {
     required this.totalCoefficient,
     required this.ueCode,
     required this.ueNatureLlFr,
+    required this.examNote,
   });
 
   factory ExamsNoteModel.fromApiResponse(ExamNote note) {
@@ -88,6 +90,7 @@ class ExamsNoteModel {
         subscribed: note.subscribed,
         totalCoefficient: note.totalCoefficient,
         ueCode: note.ueCode,
+        examNote: note.examNote,
         ueNatureLlFr: note.ueNatureLlFr);
   }
 }

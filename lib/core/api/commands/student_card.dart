@@ -3,19 +3,18 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
-final int allAcademicYearEventId = Apis.dias.index;
-final String allAcademicYearEventName = Apis.dias.name;
+final int studentCardEventId = Apis.dias.index;
+final String studentCardEventName = Apis.dias.name;
 
 class StudentCardCommand extends Command<StudentCardEventData,
     StudentCardRawEventData, StudentCardResponse> {
   final Map<String, String> _headers;
 
   StudentCardCommand([this._headers = const {}])
-      : super(allAcademicYearEventId, allAcademicYearEventName);
+      : super(studentCardEventId, studentCardEventName);
 
   @override
-  Future<StudentCardResponse> handleEvent(
-      StudentCardEventData eventData) {
+  Future<StudentCardResponse> handleEvent(StudentCardEventData eventData) {
     return handleRawEvent(eventData.toRawServiceEventData());
   }
 
@@ -37,12 +36,12 @@ class StudentCardCommand extends Command<StudentCardEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
-        List<StudentCardSection> academicYears = decodedResponse
+        List<StudentCardSection> studentCardSections = decodedResponse
             .map((e) => StudentCardSection.fromJson(e as Map<String, dynamic>))
             .toList();
 
-        return   StudentCardResponse(
-                messageId: eventData.messageId, studentCard: academicYears);
+        return StudentCardResponse(
+            messageId: eventData.messageId, studentCard: studentCardSections);
       } catch (e) {
         return StudentCardResponse(
             status: ServiceEventResponseStatus.error,
@@ -52,8 +51,7 @@ class StudentCardCommand extends Command<StudentCardEventData,
   }
 }
 
-class StudentCardEventData
-    extends ServiceEventData<StudentCardRawEventData> {
+class StudentCardEventData extends ServiceEventData<StudentCardRawEventData> {
   final String username;
 
   final String bacYear;
@@ -247,6 +245,7 @@ class StudentCardSection {
   });
 
   factory StudentCardSection.fromJson(Map<String, dynamic> json) {
+
     return StudentCardSection(
       anneeAcademiqueCode: json[CardSectionKey.anneeAcademiqueCode.name] ?? '',
       anneeAcademiqueId: json[CardSectionKey.anneeAcademiqueId.name] ?? 0,
@@ -255,21 +254,24 @@ class StudentCardSection {
       cycleLibelleLongLt: json[CardSectionKey.cycleLibelleLongLt.name] ?? '',
       dossierEtudiantId: json[CardSectionKey.dossierEtudiantId.name] ?? 0,
       id: json[CardSectionKey.id.name] ?? 0,
-      individuDateNaissance: DateTime.tryParse(json[CardSectionKey.individuDateNaissance.name]) ??
-          DateTime.now(),
-
+      individuDateNaissance:
+          DateTime.tryParse(json[CardSectionKey.individuDateNaissance.name]) ??
+              DateTime.now(),
       individuId: json[CardSectionKey.individuId.name] ?? 0,
-      individuLieuNaissance: json[CardSectionKey.individuLieuNaissance.name] ?? '',
+      individuLieuNaissance:
+          json[CardSectionKey.individuLieuNaissance.name] ?? '',
       individuLieuNaissanceArabe:
           json[CardSectionKey.individuLieuNaissanceArabe.name] ?? '',
       individuNomArabe: json[CardSectionKey.individuNomArabe.name] ?? '',
       individuNomLatin: json[CardSectionKey.individuNomLatin.name] ?? '',
       individuPrenomArabe: json[CardSectionKey.individuPrenomArabe.name] ?? '',
       individuPrenomLatin: json[CardSectionKey.individuPrenomLatin.name] ?? '',
-      lastMoyenne: json[CardSectionKey.lastMoyenne.name],
-      llEtablissementArabe: json[CardSectionKey.llEtablissementArabe.name] ?? '',
-      llEtablissementLatin: json[CardSectionKey.llEtablissementLatin.name] ?? '',
-      moyenneBac: json[CardSectionKey.moyenneBac.name] ?? 0.0,
+      lastMoyenne: (json[CardSectionKey.lastMoyenne.name] ?? 0.0).toDouble(),
+      llEtablissementArabe:
+          json[CardSectionKey.llEtablissementArabe.name] ?? '',
+      llEtablissementLatin:
+          json[CardSectionKey.llEtablissementLatin.name] ?? '',
+      moyenneBac: (json[CardSectionKey.moyenneBac.name] ?? 0.0).toDouble(),
       nin: json[CardSectionKey.nin.name] ?? '',
       niveauCode: json[CardSectionKey.niveauCode.name] ?? '',
       niveauId: json[CardSectionKey.niveauId.name] ?? 0,
@@ -293,7 +295,8 @@ class StudentCardSection {
       ouvertureOffreFormationId:
           json[CardSectionKey.ouvertureOffreFormationId.name],
       photo: json[CardSectionKey.photo.name] ?? '',
-      refCodeEtablissement: json[CardSectionKey.refCodeEtablissement.name] ?? '',
+      refCodeEtablissement:
+          json[CardSectionKey.refCodeEtablissement.name] ?? '',
       refLibelleCycle: json[CardSectionKey.refLibelleCycle.name] ?? '',
       refLibelleCycleAr: json[CardSectionKey.refLibelleCycleAr.name] ?? '',
       refCodeCycle: json[CardSectionKey.refCodeCycle.name] ?? '',
@@ -301,7 +304,7 @@ class StudentCardSection {
   }
 }
 
-class AcademicYearEvent extends ServiceEvent<StudentCardResponse> {
-  AcademicYearEvent({required super.eventData, super.callback})
-      : super(allAcademicYearEventId, allAcademicYearEventName, serviceId);
+class StudentCardEvent extends ServiceEvent<StudentCardResponse> {
+  StudentCardEvent({required super.eventData, super.callback})
+      : super(studentCardEventId, studentCardEventName, serviceId);
 }

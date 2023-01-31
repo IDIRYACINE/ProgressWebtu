@@ -21,12 +21,8 @@ class ExamsResultView extends StatelessWidget {
         if (status == StateStatus.ready) {
           return _LoadedExamsNotes(examsNotes: state.examNotes.examResults);
         } else if (status == StateStatus.loading) {
-          final academicYearStudentId =
-              state.studentCardState.studentCardSections.first.id;
 
-          final authState = state.authState;
-          logic.loadExamNotes(
-              academicYearStudentId.toString(), authState.token);
+            logic.loadData(state);
 
           return Center(child: Text(localizations.loading));
         } else {
@@ -45,7 +41,7 @@ class _LoadedExamsNotes extends StatelessWidget {
   Widget itemBuilder(BuildContext context, int index) {
     final examNote = examsNotes[index];
     return InformationLabel(
-        title: examNote.mcLibelleFr, text: examNote.moyenneGenerale.toString());
+        title: examNote.mcLibelleFr, text: examNote.examNote.toString());
   }
 
   @override

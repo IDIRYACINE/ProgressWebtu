@@ -15,7 +15,8 @@ class HomeViewLogic {
     ExamResultsRoute(),
     EvaluationsRoute(),
     ScholarDebtsRoute(),
-    BacRoute()
+    BacRoute(),
+    StudentCardRoute()
   ];
 
   Widget gridItemBuilder(BuildContext context, int index) {

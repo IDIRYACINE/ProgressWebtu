@@ -12,6 +12,7 @@ const bacRoute = '/bac';
 const subscribtionsRoute = '/subscribtions';
 const academicVacationsRoute = '/academiqueVacations';
 const creditsRoute = '/credits';
+const studentCardRoute = '/studentCard';
 const scholarDebtsRoute = '/scholarDebts';
 const payementRoute = '/payement';
 const notesRegisterRoute = '/notesRegister';

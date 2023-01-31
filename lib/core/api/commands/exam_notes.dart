@@ -8,10 +8,10 @@ final String examNotesEventName = Apis.examsResults.name;
 
 class ExamNotesCommand extends Command<ExamNotesEventData,
     ExamNotesRawEventData, ExamNotesResponse> {
-      
   final Map<String, String> _headers;
 
-  ExamNotesCommand([this._headers = const {}]) : super(examNotesEventId, examNotesEventName);
+  ExamNotesCommand([this._headers = const {}])
+      : super(examNotesEventId, examNotesEventName);
 
   @override
   Future<ExamNotesResponse> handleEvent(ExamNotesEventData eventData) {
@@ -22,7 +22,7 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
   Future<ExamNotesResponse> handleRawEvent(ExamNotesRawEventData eventData) {
     Api api = ExamsNotesApi();
 
-    String apiUrl = api.url.replaceAll(studentIdToken, eventData.studyLevel);
+    String apiUrl = api.url.replaceAll(studentIdToken, eventData.studentId);
 
     Uri url = Uri.https(host, apiUrl);
 
@@ -50,32 +50,32 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
 }
 
 class ExamNotesEventData extends ServiceEventData<ExamNotesRawEventData> {
-  final String studyLevel;
+  final String studentId;
 
   final String authKey;
   ExamNotesEventData({
-    required this.studyLevel,
+    required this.studentId,
     required this.authKey,
     required String requesterId,
   }) : super(requesterId);
 
   @override
-  ExamNotesRawEventData toRawServiceEventData( ) {
+  ExamNotesRawEventData toRawServiceEventData() {
     return ExamNotesRawEventData(
         authKey: authKey,
-        studyLevel: studyLevel,
+        studentId: studentId,
         messageId: messageId,
         requesterId: requesterId);
   }
 }
 
 class ExamNotesRawEventData extends RawServiceEventData {
-  final String studyLevel;
+  final String studentId;
 
   final String authKey;
 
   ExamNotesRawEventData(
-      {required this.studyLevel,
+      {required this.studentId,
       required this.authKey,
       required int messageId,
       required String requesterId})
@@ -120,6 +120,7 @@ enum ExamNoteKey {
   totalCoefficient,
   ueCode,
   ueNatureLlFr,
+  noteExamen
 }
 
 class ExamNote {
@@ -150,6 +151,7 @@ class ExamNote {
   final int totalCoefficient;
   final String ueCode;
   final String ueNatureLlFr;
+  final double examNote;
 
   ExamNote({
     required this.absenceJustifie,
@@ -176,6 +178,7 @@ class ExamNote {
     required this.rattachementMcId,
     required this.readerByJury,
     required this.subscribed,
+    required this.examNote,
     required this.totalCoefficient,
     required this.ueCode,
     required this.ueNatureLlFr,
@@ -194,8 +197,10 @@ class ExamNote {
       idPeriode: json[ExamNoteKey.idPeriode.name],
       mcLibelleFr: json[ExamNoteKey.mcLibelleFr.name],
       modifiableByJury: json[ExamNoteKey.modifiableByJury.name],
-      moyenneGenerale: (json[ExamNoteKey.moyenneGenerale.name] as int).toDouble() ,
-      noteEliminatoire: (json[ExamNoteKey.noteEliminatoire.name]as int).toDouble(),
+      moyenneGenerale:
+          (json[ExamNoteKey.moyenneGenerale.name] ?? 0.0 ).toDouble(),
+      noteEliminatoire:
+          (json[ExamNoteKey.noteEliminatoire.name] ?? 0.0 ).toDouble(),
       noteObtenu: json[ExamNoteKey.noteObtenu.name],
       oldAbsenceJustifie: json[ExamNoteKey.oldAbsenceJustifie.name],
       oldAbsent: json[ExamNoteKey.oldAbsent.name],
@@ -211,11 +216,12 @@ class ExamNote {
       totalCoefficient: json[ExamNoteKey.totalCoefficient.name],
       ueCode: json[ExamNoteKey.ueCode.name],
       ueNatureLlFr: json[ExamNoteKey.ueNatureLlFr.name],
+      examNote: (json[ExamNoteKey.noteExamen.name] ?? 0.0).toDouble(),
     );
   }
 }
 
-
-class ExamNotesEvent extends ServiceEvent<ExamNotesResponse>{
-  ExamNotesEvent( {required super.eventData,super.callback}) : super(examNotesEventId, examNotesEventName, serviceId);
+class ExamNotesEvent extends ServiceEvent<ExamNotesResponse> {
+  ExamNotesEvent({required super.eventData, super.callback})
+      : super(examNotesEventId, examNotesEventName, serviceId);
 }

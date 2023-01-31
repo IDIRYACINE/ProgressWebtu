@@ -9,25 +9,13 @@ import 'state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc([AppState? appState]) : super(appState ?? AppState.defaultState()){
-    on<LoadAppData>(_loadAppData);
-    on<LoginEvent>(_login);
-    on<LogoutEvent>(_logout);
     on<UpdateBacSummary>(_updateBacSummary);
     on<UpdateSections>(_updateSections);
     on<UpdateAuthState>(_updateAuthState);
+    on<UpdateExamNotes>(_updateExamNotes);
+    on<UpdateStudentCard>(_updateStudentCard);
   }
 
-  FutureOr<void> _loadAppData(LoadAppData event, Emitter<AppState> emit) {
-
-  }
-
-  FutureOr<void> _login(LoginEvent event, Emitter<AppState> emit) {
-
-  }
-
-  FutureOr<void> _logout(LogoutEvent event, Emitter<AppState> emit) {
-
-  }
 
 
   FutureOr<void> _updateBacSummary(UpdateBacSummary event, Emitter<AppState> emit) {
@@ -44,5 +32,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   FutureOr<void> _updateSections(UpdateSections event, Emitter<AppState> emit) {
     SectionState newSectionState = SectionState.fromSectionResponse(event.response);
     emit(state.copyWith(sectionsState: newSectionState));
+  }
+
+  FutureOr<void> _updateStudentCard(UpdateStudentCard event, Emitter<AppState> emit) {
+    StudentCardState newStudentCardState = StudentCardState.fromStudentCardResponse(event.response);
+    emit(state.copyWith(studentCardState: newStudentCardState));
+  }
+
+  FutureOr<void> _updateExamNotes(UpdateExamNotes event, Emitter<AppState> emit) {
+    ExamsNotesState newExamNotesState = ExamsNotesState.fromApi(event.response);
+    emit(state.copyWith(examNotes: newExamNotesState));
   }
 }

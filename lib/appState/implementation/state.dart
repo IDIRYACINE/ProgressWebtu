@@ -77,6 +77,16 @@ class ExamsNotesState {
   factory ExamsNotesState.defaultState() {
     return ExamsNotesState(StateStatus.loading, []);
   }
+
+  factory ExamsNotesState.fromApi(List<ExamNote> response) {
+    final examResults =
+        response.map((e) => ExamsNoteModel.fromApiResponse(e)).toList();
+
+    return ExamsNotesState(
+      StateStatus.ready,
+      examResults,
+    );
+  }
 }
 
 class SectionState {

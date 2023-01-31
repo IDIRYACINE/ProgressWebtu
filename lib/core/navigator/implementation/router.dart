@@ -1,5 +1,5 @@
-import 'dart:io';
 
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:progresswebtu/core/home/implementation/view.dart';
@@ -10,6 +10,7 @@ import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
 import 'package:progresswebtu/features/bac/feature.dart';
 import 'package:progresswebtu/features/examsResult/implementation/view.dart';
 import 'package:progresswebtu/features/groupsAndSections/implementation/view.dart';
+import 'package:progresswebtu/features/studentCard/feature.dart';
 import 'routes.dart';
 
 abstract class AppRouter {
@@ -57,6 +58,12 @@ abstract class AppRouter {
         return getPageRoute(
           settings: settings,
           view: const GroupsAndSectionsView(),
+        );
+
+        case studentCardRoute:
+        return getPageRoute(
+          settings: settings,
+          view: const StudentCardView(),
         );
 
       default:

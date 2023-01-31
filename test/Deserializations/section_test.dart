@@ -11,7 +11,7 @@ void main() {
     
   final jsonData = loadJsonFileContent("api_response_sections.json");
   
-  final List<Section> sections = jsonData.map((e) => Section.fromJson(e)).toList();
+  final List<Section> sections = List<Section>.from(jsonData.map((e) => Section.fromJson(e)));
 
   assert(sections.length == 2 , "Should have 2 sections");
   });

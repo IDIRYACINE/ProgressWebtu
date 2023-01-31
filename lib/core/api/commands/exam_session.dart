@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
-final int examResultsEventId = Apis.examsResults.index;
-final String examResultsEventName = Apis.examsResults.name;
+final int examResultsEventId = Apis.examsSchedule.index;
+final String examResultsEventName = Apis.examsSchedule.name;
 
 class ExamSessionsCommand extends Command<ExamSessionsEventData,
     ExamSessionsRawEventData, ExamSessionsResponse> {

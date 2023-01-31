@@ -24,8 +24,7 @@ class StudentCardView extends StatelessWidget {
           return _LoadedStudentCard(
               studentCardSections: state.studentCardState.studentCardSections);
         } else if (status == StateStatus.loading) {
-          final authState = state.authState;
-          logic.loadStudentCard(authState.userName,authState.token);
+          logic.loadStudentCard(state.authState);
 
           return Center(child: Text(localizations.loading));
         } else {

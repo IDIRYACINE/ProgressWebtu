@@ -64,8 +64,6 @@ class ApiService extends Service {
         AllSessionsBilansCommand(isTestMode ? postmanTestHeader : {}));
     replaceCommandAtIndex(
         SectionsAndGroupsCommand(isTestMode ? postmanTestHeader : {}));
-    replaceCommandAtIndex(
-        StudentCardCommand(isTestMode ? postmanTestHeader : {}));
   }
 
   @override

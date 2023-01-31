@@ -25,8 +25,8 @@ class GroupsAndSectionsView extends StatelessWidget {
           return _LoadedGroupsAndSections(
               sections: state.sectionsState.sections);
         } else if (status == StateStatus.loading) {
-          final authState = state.authState;
-          logic.loadSections(authState.userName, authState.token);
+          final studentId = state.studentCardState.studentCardSections.first.id.toString();
+          logic.loadSections(studentId, state.authState.token);
 
           return Center(child: Text(localizations.loading));
         } else {

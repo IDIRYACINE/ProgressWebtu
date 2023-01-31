@@ -21,12 +21,12 @@ class ExamsNoteModel {
   final bool oldCopieNonRemise;
   final int planningSessionId;
   final String planningSessionIntitule;
-  final int rattachementMcCoefficient;
-  final int rattachementMcCredit;
+  final double rattachementMcCoefficient;
+  final double rattachementMcCredit;
   final int rattachementMcId;
   final bool readerByJury;
   final bool subscribed;
-  final int totalCoefficient;
+  final double totalCoefficient;
   final String ueCode;
   final String ueNatureLlFr;
   final double examNote;

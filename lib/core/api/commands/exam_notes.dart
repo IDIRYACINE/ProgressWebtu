@@ -26,6 +26,7 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
 
     Uri url = Uri.https(host, apiUrl);
 
+
     _headers.putIfAbsent("authorization", () => eventData.authKey);
 
     return ApiService.instance()
@@ -34,10 +35,11 @@ class ExamNotesCommand extends Command<ExamNotesEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
+                
+
         List<ExamNote> examNotes = decodedResponse
             .map((e) => ExamNote.fromJson(e as Map<String, dynamic>))
             .toList();
-
         return ExamNotesResponse(
             messageId: eventData.messageId, examNotes: examNotes);
       } catch (e) {
@@ -143,12 +145,12 @@ class ExamNote {
   final bool oldCopieNonRemise;
   final int planningSessionId;
   final String planningSessionIntitule;
-  final int rattachementMcCoefficient;
-  final int rattachementMcCredit;
+  final double rattachementMcCoefficient;
+  final double rattachementMcCredit;
   final int rattachementMcId;
   final bool readerByJury;
   final bool subscribed;
-  final int totalCoefficient;
+  final double totalCoefficient;
   final String ueCode;
   final String ueNatureLlFr;
   final double examNote;
@@ -208,15 +210,15 @@ class ExamNote {
       planningSessionId: json[ExamNoteKey.planningSessionId.name],
       planningSessionIntitule: json[ExamNoteKey.planningSessionIntitule.name],
       rattachementMcCoefficient:
-          json[ExamNoteKey.rattachementMcCoefficient.name],
-      rattachementMcCredit: json[ExamNoteKey.rattachementMcCredit.name],
+          (json[ExamNoteKey.rattachementMcCoefficient.name]?? 0).toDouble(),
+      rattachementMcCredit: (json[ExamNoteKey.rattachementMcCredit.name]?? 0).toDouble(),
       rattachementMcId: json[ExamNoteKey.rattachementMcId.name],
       readerByJury: json[ExamNoteKey.readerByJury.name],
       subscribed: json[ExamNoteKey.subscribed.name],
-      totalCoefficient: json[ExamNoteKey.totalCoefficient.name],
+      totalCoefficient: (json[ExamNoteKey.totalCoefficient.name] ?? 0).toDouble(),
       ueCode: json[ExamNoteKey.ueCode.name],
       ueNatureLlFr: json[ExamNoteKey.ueNatureLlFr.name],
-      examNote: (json[ExamNoteKey.noteExamen.name] ?? 0.0).toDouble(),
+      examNote: (json[ExamNoteKey.noteExamen.name] ?? 0).toDouble(),
     );
   }
 }

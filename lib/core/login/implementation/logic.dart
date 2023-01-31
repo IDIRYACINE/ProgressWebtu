@@ -5,6 +5,7 @@ import 'package:progresswebtu/constants/metadata.dart';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/core/navigator/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
+import 'package:progresswebtu/utility/parser.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 import 'package:progresswebtu/widgets/dialogs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,7 +49,7 @@ class LoginLogic {
     if (username.isNotEmpty && password.isNotEmpty) {
       _username = username;
       _password = password;
-      
+
       if (currentDate.day != expirationDate.day) {
         _sendLoginEvent(username, password, authToken);
         return true;
@@ -78,17 +79,19 @@ class LoginLogic {
 
   Future<void> _onLoginSuccess(LoginResponse response) async {
     final prefs = await SharedPreferences.getInstance();
-   
+
     prefs.setString(AppMetadata.usernameSharedPrefKey, _username!);
     prefs.setString(AppMetadata.passwordSharedPrefKey, _password!);
     prefs.setString(AppMetadata.authTokenSharedPrefKey, response.token);
     prefs.setString(
         AppMetadata.authTokenExpirationSharedPrefKey, response.expirationDate);
 
-      BlocProvider.of<bloc.AppBloc>(formKey.currentContext!)
-          .add(bloc.UpdateAuthState(response));
+    BlocProvider.of<bloc.AppBloc>(formKey.currentContext!)
+        .add(bloc.UpdateAuthState(response));
 
-      AppNavigator.pushNamedReplacement(dashboardRoute);
+    final username = parseBacNumberFromUsername(_username!);
+    final bacYear = parseBacYearFromUsername(_username!);
+    _loadStudentCard(username, bacYear, response.token);
   }
 
   void _onLoginFail() {
@@ -104,5 +107,30 @@ class LoginLogic {
     } else {
       _onLoginFail();
     }
+  }
+
+  Future<void> _loadStudentCard(
+      String username, String bacYear, String authToken) async {
+        AppNavigator.displayDialog(buildLoadingDialog());
+    final data = StudentCardEventData(
+        authKey: authToken,
+        requesterId: id,
+        bacYear: bacYear,
+        username: username);
+
+    final event = StudentCardEvent(eventData: data);
+
+    ApiService.instance()
+        .onEventForResponse(event)
+        .then((response ) => _updateStudentCardState(response as StudentCardResponse));
+  }
+
+  void _updateStudentCardState(StudentCardResponse response) {
+    final event = bloc.UpdateStudentCard(response.studentCard!);
+
+    BlocProvider.of<bloc.AppBloc>(formKey.currentContext!).add(event);
+
+
+    AppNavigator.pushNamedReplacement(dashboardRoute);
   }
 }

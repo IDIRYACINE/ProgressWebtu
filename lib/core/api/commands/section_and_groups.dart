@@ -21,8 +21,8 @@ class SectionsAndGroupsCommand
   Future<SectionsResponse> handleRawEvent(SectionsRawEventData eventData) {
     Api api = SectionsAndGroupsApi();
 
-    String apiUrl = api.url.replaceAll(usernameToken, eventData.username);
-    apiUrl = apiUrl.replaceAll(bacYearToken, eventData.bacYear);
+    String apiUrl = api.url.replaceAll(studentIdToken, eventData.studentId);
+    apiUrl = apiUrl.replaceAll(bacYearToken, eventData.studentId);
 
     Uri url = Uri.https(host, apiUrl);
 
@@ -50,14 +50,11 @@ class SectionsAndGroupsCommand
 }
 
 class SectionsEventData extends ServiceEventData<SectionsRawEventData> {
-  final String username;
-
-  final String bacYear;
+  final String studentId;
 
   final String authKey;
   SectionsEventData({
-    required this.username,
-    required this.bacYear,
+    required this.studentId,
     required this.authKey,
     required String requesterId,
   }) : super(requesterId);
@@ -66,23 +63,19 @@ class SectionsEventData extends ServiceEventData<SectionsRawEventData> {
   SectionsRawEventData toRawServiceEventData() {
     return SectionsRawEventData(
         authKey: authKey,
-        bacYear: bacYear,
-        username: username,
+        studentId: studentId,
         messageId: messageId,
         requesterId: requesterId);
   }
 }
 
 class SectionsRawEventData extends RawServiceEventData {
-  final String username;
-
-  final String bacYear;
+  final String studentId;
 
   final String authKey;
 
   SectionsRawEventData(
-      {required this.username,
-      required this.bacYear,
+      {required this.studentId,
       required this.authKey,
       required int messageId,
       required String requesterId})

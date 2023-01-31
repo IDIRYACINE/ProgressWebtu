@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progresswebtu/appState/state.dart';
 import 'package:progresswebtu/features/examsResult/implementation/logic.dart';
-import 'package:progresswebtu/widgets/labels.dart';
 
 class ExamsResultView extends StatelessWidget {
   const ExamsResultView({super.key});
@@ -40,8 +39,12 @@ class _LoadedExamsNotes extends StatelessWidget {
 
   Widget itemBuilder(BuildContext context, int index) {
     final examNote = examsNotes[index];
-    return InformationLabel(
-        title: examNote.mcLibelleFr, text: examNote.examNote.toString());
+    return Card(child: Column(
+      children: [
+        Text(examNote.mcLibelleFr),
+        Text(examNote.examNote.toString())
+      ],
+    ),);
   }
 
   @override

@@ -20,8 +20,8 @@ class LoginView extends StatelessWidget {
 
     final data = ModalRoute.of(context)!.settings.arguments as StoredDataState;
 
-    return Material(
-      child: Container(
+    return Scaffold(
+      body: Container(
         color: theme.scaffoldBackgroundColor,
         child: Form(
           key: logic.formKey,

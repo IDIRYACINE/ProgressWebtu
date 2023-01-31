@@ -13,7 +13,7 @@ class ApiService extends Service {
 
   ApiService._internal(this.isTestMode, super.searchAlgorithm);
 
-  factory ApiService.instance([bool isTestMode = true]) {
+  factory ApiService.instance([bool isTestMode = false]) {
     if (_instance == null) {
       BinarySearchAlgorithm<Command, int> searchAlgorithm =
           _createSearchAlgorithm();

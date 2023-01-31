@@ -10,3 +10,12 @@ Widget buildHintDialog([String hint = 'Hint']) {
       ],
     );
   }
+
+Widget buildLoadingDialog() {
+    return   AlertDialog(
+        content: ConstrainedBox(
+      constraints:  const BoxConstraints(maxHeight: 100),
+      child:const Center(child: CircularProgressIndicator()),
+      ),
+    );
+  } 

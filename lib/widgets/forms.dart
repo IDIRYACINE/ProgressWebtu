@@ -35,16 +35,19 @@ class LoginTextForm extends StatelessWidget {
 
     final inputPrefix = icon != null ? Icon(icon) : null;
 
-    return TextFormField(
-      decoration: InputDecoration(
-        fillColor: Theme.of(context).backgroundColor,
-        filled: true,
-          border: const OutlineInputBorder(),
-          labelText: inputLabel,
-          prefixIcon: inputPrefix,
-          suffixIcon: hintSuffix),
-      validator: validator,
-      onChanged: onChanged,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 400),
+      child: TextFormField(
+        decoration: InputDecoration(
+          fillColor: Theme.of(context).backgroundColor,
+          filled: true,
+            border: const OutlineInputBorder(),
+            labelText: inputLabel,
+            prefixIcon: inputPrefix,
+            suffixIcon: hintSuffix),
+        validator: validator,
+        onChanged: onChanged,
+      ),
     );
   }
 }

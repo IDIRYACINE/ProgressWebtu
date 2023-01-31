@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
             onGenerateRoute: AppRouter.generateRoutes,
             locale: settingsController.locale,
             initialRoute: loadingRoute,
+            
           );
         });
   }

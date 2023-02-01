@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
-import 'models.dart';
 
 final int allSessionsEventId = Apis.allSessions.index;
 final String allSessionsEventName = Apis.allSessions.name;

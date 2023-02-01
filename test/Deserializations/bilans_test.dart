@@ -21,7 +21,6 @@ void main() {
       }
     });
 
-    print(bilans[bilanIndex].bilanUes[ueIndex].bilanMcs.length);
 
     final libelle =
         bilans[bilanIndex].bilanUes[ueIndex].bilanMcs[mcIndex].mcLibelleFr;

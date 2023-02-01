@@ -12,6 +12,7 @@ class AppState {
     required this.bacSummaryState,
     required this.studentCardState,
     required this.examSessionsState,
+    required this.bilansState,
   });
 
   final AuthState authState;
@@ -20,6 +21,7 @@ class AppState {
   final ExamsNotesState examNotesState;
   final StudentCardState studentCardState;
   final ExamsSessionsState examSessionsState ;
+  final BilansState bilansState;
 
   AppState copyWith(
       {AuthState? authState,
@@ -27,7 +29,8 @@ class AppState {
       SectionState? sectionsState,
       StudentCardState? studentCardState,
       ExamsNotesState? examNotesState,
-      ExamsSessionsState? examSessionsState
+      ExamsSessionsState? examSessionsState,
+      BilansState? bilansState
       }) {
     return AppState(
       bacSummaryState: bacSummaryState ?? this.bacSummaryState,
@@ -36,6 +39,7 @@ class AppState {
       examNotesState: examNotesState ?? this.examNotesState,
       studentCardState: studentCardState ?? this.studentCardState,
       examSessionsState: examSessionsState ?? this.examSessionsState,
+      bilansState: bilansState ?? this.bilansState,
     );
   }
 
@@ -47,6 +51,27 @@ class AppState {
       examNotesState: ExamsNotesState.defaultState(),
       studentCardState: StudentCardState.defaultState(),
       examSessionsState: ExamsSessionsState.defaultState(),
+      bilansState: BilansState.defaultState(),
+    );
+  }
+}
+
+class BilansState{
+  final StateStatus stateStatus;
+  final List<SessionBilanModel> bilans;
+
+  BilansState(this.stateStatus, this.bilans);
+
+  factory BilansState.defaultState() {
+    return BilansState(StateStatus.loading, []);
+  }
+
+  factory BilansState.fromApi(List<SessionBilan> response) {
+    final bilans = response.map((e) => SessionBilanModel.fromApi(e)).toList();
+
+    return BilansState(
+      StateStatus.ready,
+      bilans,
     );
   }
 }

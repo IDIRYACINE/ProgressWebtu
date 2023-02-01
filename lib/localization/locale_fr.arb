@@ -182,5 +182,6 @@
     "rangNiveau": "rangNiveau",
     "refCodePeriode": "refCodePeriode",
     "refCodePeriodicite": "refCodePeriodicite",
-    "studentCard": "Carte Etudiant"
+    "studentCard": "Carte Etudiant",
+    "bilans": "Bilans"
 }

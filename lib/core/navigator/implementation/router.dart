@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:progresswebtu/core/settings/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
 import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
 import 'package:progresswebtu/features/bac/feature.dart';
+import 'package:progresswebtu/features/bilans/feature.dart';
 import 'package:progresswebtu/features/examsPlaning/implementation/view.dart';
 import 'package:progresswebtu/features/examsResult/implementation/view.dart';
 import 'package:progresswebtu/features/groupsAndSections/implementation/view.dart';
@@ -36,10 +36,16 @@ abstract class AppRouter {
             controller: SettingsController.instance,
           ),
         );
-        case examPlaningsRoute:
+      case examPlaningsRoute:
         return getPageRoute(
           settings: settings,
           view: const ExamsPlanningsView(),
+        );
+
+      case bilansRoute:
+        return getPageRoute(
+          settings: settings,
+          view: const BilansView(),
         );
 
       case bacRoute:
@@ -54,19 +60,19 @@ abstract class AppRouter {
           view: SplashView(settings: settings),
         );
 
-        case examResultsRoute:
+      case examResultsRoute:
         return getPageRoute(
           settings: settings,
           view: const ExamsResultView(),
         );
 
-        case groupeAndSectionsRoute:
+      case groupeAndSectionsRoute:
         return getPageRoute(
           settings: settings,
           view: const GroupsAndSectionsView(),
         );
 
-        case studentCardRoute:
+      case studentCardRoute:
         return getPageRoute(
           settings: settings,
           view: const StudentCardView(),

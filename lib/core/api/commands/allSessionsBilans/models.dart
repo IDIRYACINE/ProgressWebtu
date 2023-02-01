@@ -1,4 +1,3 @@
-
 enum SessionBilanKey {
   id,
   type,
@@ -38,8 +37,8 @@ class SessionBilan {
   final String niveauCode;
   final int niveauRang;
   final String niveauLibelleLongLt;
-  final int totalAquis;
-  final int effectif;
+  final double totalAquis;
+  final double effectif;
   final double coefficient;
 
   SessionBilan({
@@ -65,34 +64,41 @@ class SessionBilan {
   });
 
   factory SessionBilan.fromJson(Map<String, dynamic> json) {
+    
+    final bilansUe = List<BilanUe>.from(
+        (json[SessionBilanKey.bilanUes.name] ?? [])
+            .map((e) => BilanUe.fromJson(e as Map<String, dynamic>)));
+
     return SessionBilan(
-      id: json[SessionBilanKey.id.toString()] as int,
-      type: json[SessionBilanKey.type.toString()] as int,
-      periodeId: json[SessionBilanKey.periodeId.toString()] as int,
-      periodeLibelleFr: json[SessionBilanKey.periodeLibelleFr.toString()] as String,
-      periodeLibelleAr: json[SessionBilanKey.periodeLibelleAr.toString()] as String,
-      bilanUes: (json[SessionBilanKey.bilanUes.toString()] as List<dynamic>)
-          .map((e) => BilanUe.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      moyenne: json[SessionBilanKey.moyenne.toString()] as double,
-      moyenneSn: json[SessionBilanKey.moyenneSn.toString()] as double,
-      credit: json[SessionBilanKey.credit.toString()] as double,
-      creditObtenu: json[SessionBilanKey.creditObtenu.toString()] as double,
-      creditAcquis: json[SessionBilanKey.creditAcquis.toString()] as double,
-      annuel: json[SessionBilanKey.annuel.toString()] as bool,
-      cycleLibelleLongLt: json[SessionBilanKey.cycleLibelleLongLt.toString()] as String,
-      niveauCode: json[SessionBilanKey.niveauCode.toString()] as String,
-      niveauRang: json[SessionBilanKey.niveauRang.toString()] as int,
-      niveauLibelleLongLt: json[SessionBilanKey.niveauLibelleLongLt.toString()] as String,
-      totalAquis: json[SessionBilanKey.totalAquis.toString()] as int,
-      effectif: json[SessionBilanKey.effectif.toString()] as int,
-      coefficient: json[SessionBilanKey.coefficient.toString()] as double,
+      id: json[SessionBilanKey.id.name] ?? 0,
+      type: json[SessionBilanKey.type.name] ?? 0,
+      periodeId: json[SessionBilanKey.periodeId.name] ?? 0,
+      periodeLibelleFr: json[SessionBilanKey.periodeLibelleFr.name] ?? "",
+      periodeLibelleAr: json[SessionBilanKey.periodeLibelleAr.name] ?? "",
+      bilanUes: bilansUe,
+      moyenne: (json[SessionBilanKey.moyenne.name] ?? 0).toDouble(),
+      moyenneSn: (json[SessionBilanKey.moyenneSn.name] ?? 0).toDouble(),
+      credit: (json[SessionBilanKey.credit.name] ?? 0).toDouble(),
+      creditObtenu:
+          (json[SessionBilanKey.creditObtenu.name] ?? 0).toDouble(),
+      creditAcquis:
+          (json[SessionBilanKey.creditAcquis.name] ?? 0).toDouble(),
+      annuel: json[SessionBilanKey.annuel.name] ?? false,
+      cycleLibelleLongLt:
+          json[SessionBilanKey.cycleLibelleLongLt.name] ?? "",
+      niveauCode: json[SessionBilanKey.niveauCode.name] ?? "",
+      niveauRang: json[SessionBilanKey.niveauRang.name] ?? 0,
+      niveauLibelleLongLt:
+          json[SessionBilanKey.niveauLibelleLongLt.name] ?? "",
+      totalAquis: (json[SessionBilanKey.totalAquis.name] ?? 0).toDouble(),
+      effectif: (json[SessionBilanKey.effectif.name] ?? 0).toDouble(),
+      coefficient:
+          (json[SessionBilanKey.coefficient.name] ?? 0).toDouble(),
     );
   }
-
 }
 
-enum BilanMcKey{
+enum BilanMcKey {
   id,
   bilanUeId,
   bilanSessionId,
@@ -129,8 +135,8 @@ class BilanMc {
   final double noteExamen;
   final double noteJury;
   final double moyenneGenerale;
-  final int totalAquis;
-  final int effectif;
+  final double totalAquis;
+  final double effectif;
   final int nbrEtudiantAmeliorerNoteSession2;
 
   const BilanMc({
@@ -156,30 +162,35 @@ class BilanMc {
 
   factory BilanMc.fromJson(Map<String, dynamic> json) {
     return BilanMc(
-      id: json[BilanMcKey.id.toString()] as int,
-      bilanUeId: json[BilanMcKey.bilanUeId.toString()] as int,
-      bilanSessionId: json[BilanMcKey.bilanSessionId.toString()] as int,
-      rattachementMcId: json[BilanMcKey.rattachementMcId.toString()] as int,
-      mcLibelleFr: json[BilanMcKey.mcLibelleFr.toString()] as String,
-      mcCode: json[BilanMcKey.mcCode.toString()] as String,
-      moyenneControleContinu: json[BilanMcKey.moyenneControleContinu.toString()] as double,
-      coefficient: json[BilanMcKey.coefficient.toString()] as double,
-      credit: json[BilanMcKey.credit.toString()] as double,
-      creditObtenu: json[BilanMcKey.creditObtenu.toString()] as double,
-      coefficientControleContinu: json[BilanMcKey.coefficientControleContinu.toString()] as double,
-      coefficientExamen: json[BilanMcKey.coefficientExamen.toString()] as double,
-      noteExamen: json[BilanMcKey.noteExamen.toString()] as double,
-      noteJury: json[BilanMcKey.noteJury.toString()] as double,
-      moyenneGenerale: json[BilanMcKey.moyenneGenerale.toString()] as double,
-      totalAquis: json[BilanMcKey.totalAquis.toString()] as int,
-      effectif: json[BilanMcKey.effectif.toString()] as int,
-      nbrEtudiantAmeliorerNoteSession2: json[BilanMcKey.nbrEtudiantAmeliorerNoteSession2.toString()] as int,
+      id: json[BilanMcKey.id.name] ?? 0,
+      bilanUeId: json[BilanMcKey.bilanUeId.name] ?? 0,
+      bilanSessionId: json[BilanMcKey.bilanSessionId.name] ?? 0,
+      rattachementMcId: json[BilanMcKey.rattachementMcId.name] ?? 0,
+      mcLibelleFr: json[BilanMcKey.mcLibelleFr.name] ?? "",
+      mcCode: json[BilanMcKey.mcCode.name] ?? "",
+      moyenneControleContinu:
+          (json[BilanMcKey.moyenneControleContinu.name] ?? 0).toDouble(),
+      coefficient: (json[BilanMcKey.coefficient.name] ?? 0).toDouble(),
+      credit: (json[BilanMcKey.credit.name] ?? 0).toDouble(),
+      creditObtenu: (json[BilanMcKey.creditObtenu.name] ?? 0).toDouble(),
+      coefficientControleContinu:
+          (json[BilanMcKey.coefficientControleContinu.name] ?? 0)
+              .toDouble(),
+      coefficientExamen:
+          (json[BilanMcKey.coefficientExamen.name] ?? 0).toDouble(),
+      noteExamen: (json[BilanMcKey.noteExamen.name] ?? 0).toDouble(),
+      noteJury: (json[BilanMcKey.noteJury.name] ?? 0).toDouble(),
+      moyenneGenerale:
+          (json[BilanMcKey.moyenneGenerale.name] ?? 0).toDouble(),
+      totalAquis: (json[BilanMcKey.totalAquis.name] ?? 0).toDouble(),
+      effectif: (json[BilanMcKey.effectif.name] ?? 0).toDouble(),
+      nbrEtudiantAmeliorerNoteSession2:
+          json[BilanMcKey.nbrEtudiantAmeliorerNoteSession2.name] ?? 0,
     );
   }
-
 }
 
-enum BilanUeKey{
+enum BilanUeKey {
   id,
   bilanSessionId,
   repartitionUeId,
@@ -223,8 +234,8 @@ class BilanUe {
   final List<BilanMc> bilanMcs;
   final double ueNoteObtention;
   final bool ueAcquis;
-  final int totalAquis;
-  final int effectif;
+  final double totalAquis;
+  final double effectif;
 
   const BilanUe({
     required this.id,
@@ -251,28 +262,31 @@ class BilanUe {
   });
 
   factory BilanUe.fromJson(Map<String, dynamic> json) {
+    final bilanMcs = List<BilanMc>.from(
+        (json[BilanUeKey.bilanMcs.name] ?? []).map((e) => BilanMc.fromJson(e)));
+
     return BilanUe(
-      id: json[BilanUeKey.id],
-      bilanSessionId: json[BilanUeKey.bilanSessionId],
-      repartitionUeId: json[BilanUeKey.repartitionUeId],
-      ueLibelleFr: json[BilanUeKey.ueLibelleFr],
-      ueCode: json[BilanUeKey.ueCode],
-      ueType: json[BilanUeKey.ueType],
-      moyenne: json[BilanUeKey.moyenne],
-      coefficient: json[BilanUeKey.coefficient],
-      credit: json[BilanUeKey.credit],
-      creditObtenu: json[BilanUeKey.creditObtenu],
-      creditAcquis: json[BilanUeKey.creditAcquis],
-      ueNatureLlFr: json[BilanUeKey.ueNatureLlFr],
-      ueNatureLlAr: json[BilanUeKey.ueNatureLlAr],
-      ueNatureLcFr: json[BilanUeKey.ueNatureLcFr],
-      ueNatureLcAr: json[BilanUeKey.ueNatureLcAr],
-      ueNatureCode: json[BilanUeKey.ueNatureCode],
-      bilanMcs:  json[BilanUeKey.bilanMcs] != null ? (json[BilanUeKey.bilanMcs] as List).map((e) => BilanMc.fromJson(e)).toList() : [],
-      ueNoteObtention: json[BilanUeKey.ueNoteObtention],
-      ueAcquis: json[BilanUeKey.ueAcquis],
-      totalAquis: json[BilanUeKey.totalAquis],
-      effectif: json[BilanUeKey.effectif],
+      id: json[BilanUeKey.id.name] ?? 0,
+      bilanSessionId: json[BilanUeKey.bilanSessionId.name] ?? 0,
+      repartitionUeId: json[BilanUeKey.repartitionUeId.name] ?? 0,
+      ueLibelleFr: json[BilanUeKey.ueLibelleFr.name] ?? "",
+      ueCode: json[BilanUeKey.ueCode.name] ?? "",
+      ueType: json[BilanUeKey.ueType.name] ?? "",
+      moyenne: (json[BilanUeKey.moyenne.name] ?? 0).toDouble(),
+      coefficient: (json[BilanUeKey.coefficient.name]?? 0).toDouble(),
+      credit: (json[BilanUeKey.credit.name] ?? 0).toDouble(),
+      creditObtenu: (json[BilanUeKey.creditObtenu.name] ?? 0).toDouble(),
+      creditAcquis: (json[BilanUeKey.creditAcquis.name] ?? 0).toDouble(),
+      ueNatureLlFr: json[BilanUeKey.ueNatureLlFr.name] ?? "",
+      ueNatureLlAr: json[BilanUeKey.ueNatureLlAr.name] ?? "",
+      ueNatureLcFr: json[BilanUeKey.ueNatureLcFr.name] ?? "",
+      ueNatureLcAr: json[BilanUeKey.ueNatureLcAr.name] ?? "",
+      ueNatureCode: json[BilanUeKey.ueNatureCode.name] ?? "",
+      bilanMcs: bilanMcs,
+      ueNoteObtention: (json[BilanUeKey.ueNoteObtention.name] ?? 0).toDouble(),
+      ueAcquis: json[BilanUeKey.ueAcquis.name] ?? false,
+      totalAquis: (json[BilanUeKey.totalAquis.name] ?? 0).toDouble(),
+      effectif: (json[BilanUeKey.effectif.name] ?? 0).toDouble(),
     );
   }
 }

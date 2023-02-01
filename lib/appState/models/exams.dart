@@ -1,5 +1,7 @@
 import 'package:progresswebtu/core/api/feature.dart';
 
+
+
 class ExamSessionModel {
   final String anneeAcademiqueCode;
   final int anneeAcademiqueId;

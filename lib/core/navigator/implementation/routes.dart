@@ -13,6 +13,7 @@ const subscribtionsRoute = '/subscribtions';
 const academicVacationsRoute = '/academiqueVacations';
 const creditsRoute = '/credits';
 const studentCardRoute = '/studentCard';
+const bilansRoute = '/bilans';
 const scholarDebtsRoute = '/scholarDebts';
 const payementRoute = '/payement';
 const notesRegisterRoute = '/notesRegister';

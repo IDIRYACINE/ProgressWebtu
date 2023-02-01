@@ -49,3 +49,9 @@ class UpdateExamSessions extends AppEvent {
 
   UpdateExamSessions(this.response);
 }
+
+class UpdateBilans extends AppEvent {
+  final List<SessionBilan> response;
+
+  UpdateBilans(this.response);
+}

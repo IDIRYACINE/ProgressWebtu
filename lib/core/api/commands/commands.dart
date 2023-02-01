@@ -1,5 +1,6 @@
 export 'student_card.dart';
 export 'allSessionsBilans/all_sessions_bilans.dart';
+export 'allSessionsBilans/models.dart';
 export 'bac_notes.dart';
 export 'bac_summary.dart';
 export 'current_academic_year.dart';
@@ -7,3 +8,4 @@ export 'exam_notes.dart';
 export 'exam_session.dart';
 export 'login.dart';
 export 'semestre_summary.dart';
+export 'section_and_groups.dart';

@@ -15,6 +15,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<UpdateExamNotes>(_updateExamNotes);
     on<UpdateStudentCard>(_updateStudentCard);
     on<UpdateExamSessions>(_updateExamSessions);
+    on<UpdateBilans>(_updateBilans);
   }
 
 
@@ -48,5 +49,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   FutureOr<void> _updateExamSessions(UpdateExamSessions event, Emitter<AppState> emit) {
     ExamsSessionsState newExamSessionsState = ExamsSessionsState.fromApi(event.response);
     emit(state.copyWith(examSessionsState: newExamSessionsState));
+  }
+
+  FutureOr<void> _updateBilans(UpdateBilans event, Emitter<AppState> emit) {
+    BilansState newBilansState = BilansState.fromApi(event.response);
+    emit(state.copyWith(bilansState: newBilansState));
   }
 }

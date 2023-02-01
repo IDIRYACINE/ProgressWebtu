@@ -27,8 +27,8 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
     Api api = AllSessionsApi();
 
     String apiUrl =
-        api.url.replaceAll(formationOffreToken, eventData.formationId);
-    apiUrl = apiUrl.replaceAll(studyLevelToken, eventData.studyLevel);
+        api.url.replaceAll(bacYearToken, eventData.bacYear);
+    apiUrl = apiUrl.replaceAll(usernameToken, eventData.username);
 
     Uri url = Uri.https(host, apiUrl);
 
@@ -43,7 +43,8 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
         List<SessionBilan> allSessionsBilans = [];
 
         for (Map<String, dynamic> sessionBilan in decodedResponse) {
-          if (sessionBilan[SessionBilanKey.annuel.name] == false) {
+          bool annuel = sessionBilan[SessionBilanKey.annuel.name] ?? false;
+          if (annuel == false) {
             allSessionsBilans.add(SessionBilan.fromJson(sessionBilan));
           }
         }
@@ -52,6 +53,7 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
             messageId: eventData.messageId,
             allSessionsBilans: allSessionsBilans);
       } catch (e) {
+
         return AllSessionsBilansResponse(
             status: ServiceEventResponseStatus.error,
             messageId: eventData.messageId);
@@ -62,13 +64,13 @@ class AllSessionsBilansCommand extends Command<AllSessionsBilansEventData,
 
 class AllSessionsBilansEventData
     extends ServiceEventData<AllSessionsBilansRawEventData> {
-  final String studyLevel;
-  final String formationId;
+  final String username;
+  final String bacYear;
 
   final String authKey;
   AllSessionsBilansEventData({
-    required this.formationId,
-    required this.studyLevel,
+    required this.bacYear,
+    required this.username,
     required this.authKey,
     required String requesterId,
   }) : super(requesterId);
@@ -76,23 +78,23 @@ class AllSessionsBilansEventData
   @override
   AllSessionsBilansRawEventData toRawServiceEventData() {
     return AllSessionsBilansRawEventData(
-        formationId: formationId,
+        bacYear: bacYear,
         authKey: authKey,
-        studyLevel: studyLevel,
+        username: username,
         messageId: messageId,
         requesterId: requesterId);
   }
 }
 
 class AllSessionsBilansRawEventData extends RawServiceEventData {
-  final String studyLevel;
-  final String formationId;
+  final String username;
+  final String bacYear;
 
   final String authKey;
 
   AllSessionsBilansRawEventData(
-      {required this.studyLevel,
-      required this.formationId,
+      {required this.username,
+      required this.bacYear,
       required this.authKey,
       required int messageId,
       required String requesterId})

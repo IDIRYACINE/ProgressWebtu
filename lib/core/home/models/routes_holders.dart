@@ -137,3 +137,12 @@ class StudentCardRoute extends RouteHolder {
     return AppLocalizations.of(context)!.studentCard;
   }
 }
+
+class BilansRoute extends RouteHolder {
+  const BilansRoute() : super(routeName: bilansRoute, icon: Icons.credit_card);
+
+  @override
+  String getRouteTitle(BuildContext context) {
+    return AppLocalizations.of(context)!.bilans;
+  }
+}

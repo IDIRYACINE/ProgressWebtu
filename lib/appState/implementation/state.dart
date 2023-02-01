@@ -6,31 +6,36 @@ enum StateStatus { loading, ready }
 
 class AppState {
   const AppState({
-    required this.examNotes,
+    required this.examNotesState,
     required this.sectionsState,
     required this.authState,
     required this.bacSummaryState,
     required this.studentCardState,
+    required this.examSessionsState,
   });
 
   final AuthState authState;
   final BacSummaryState bacSummaryState;
   final SectionState sectionsState;
-  final ExamsNotesState examNotes;
+  final ExamsNotesState examNotesState;
   final StudentCardState studentCardState;
+  final ExamsSessionsState examSessionsState ;
 
   AppState copyWith(
       {AuthState? authState,
       BacSummaryState? bacSummaryState,
       SectionState? sectionsState,
       StudentCardState? studentCardState,
-      ExamsNotesState? examNotes}) {
+      ExamsNotesState? examNotesState,
+      ExamsSessionsState? examSessionsState
+      }) {
     return AppState(
       bacSummaryState: bacSummaryState ?? this.bacSummaryState,
       authState: authState ?? this.authState,
       sectionsState: sectionsState ?? this.sectionsState,
-      examNotes: examNotes ?? this.examNotes,
+      examNotesState: examNotesState ?? this.examNotesState,
       studentCardState: studentCardState ?? this.studentCardState,
+      examSessionsState: examSessionsState ?? this.examSessionsState,
     );
   }
 
@@ -39,8 +44,30 @@ class AppState {
       authState: AuthState.defaultState(),
       bacSummaryState: BacSummaryState.defaultState(),
       sectionsState: SectionState.defaultState(),
-      examNotes: ExamsNotesState.defaultState(),
+      examNotesState: ExamsNotesState.defaultState(),
       studentCardState: StudentCardState.defaultState(),
+      examSessionsState: ExamsSessionsState.defaultState(),
+    );
+  }
+}
+
+class ExamsSessionsState{
+  final StateStatus stateStatus;
+  final List<ExamSessionModel> examSessions;
+
+  ExamsSessionsState(this.stateStatus, this.examSessions);
+
+  factory ExamsSessionsState.defaultState() {
+    return ExamsSessionsState(StateStatus.loading, []);
+  }
+
+  factory ExamsSessionsState.fromApi(List<ExamSession> response) {
+    final examSessions =
+        response.map((e) => ExamSessionModel.fromApi(e)).toList();
+
+    return ExamsSessionsState(
+      StateStatus.ready,
+      examSessions,
     );
   }
 }

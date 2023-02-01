@@ -8,6 +8,7 @@ import 'package:progresswebtu/core/settings/feature.dart';
 import 'package:progresswebtu/core/splash/feature.dart';
 import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
 import 'package:progresswebtu/features/bac/feature.dart';
+import 'package:progresswebtu/features/examsPlaning/implementation/view.dart';
 import 'package:progresswebtu/features/examsResult/implementation/view.dart';
 import 'package:progresswebtu/features/groupsAndSections/implementation/view.dart';
 import 'package:progresswebtu/features/studentCard/feature.dart';
@@ -34,6 +35,11 @@ abstract class AppRouter {
           view: SettingsView(
             controller: SettingsController.instance,
           ),
+        );
+        case examPlaningsRoute:
+        return getPageRoute(
+          settings: settings,
+          view: const ExamsPlanningsView(),
         );
 
       case bacRoute:

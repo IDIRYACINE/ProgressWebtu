@@ -1,5 +1,143 @@
-
 import 'package:progresswebtu/core/api/feature.dart';
+
+class ExamSessionModel {
+  final String anneeAcademiqueCode;
+  final int anneeAcademiqueId;
+  final bool avecControle;
+  final bool avecControleContinu;
+  final bool avecControleIntermediaire;
+  final String codePeriode;
+  final double coefficient;
+  final double coefficientNoteEliminatoire;
+  final String cycleCode;
+  final int cycleId;
+  final String cycleLibelleLongLt;
+  final String dateCloture;
+  final String dateCreation;
+  final String dateDebut;
+  final String dateFin;
+  final String datePublication;
+  final bool estMigree;
+  final int id;
+  final int idPeriode;
+  final String intitule;
+  final String libellePeriode;
+  final String ncTypeSessionCode;
+  final int ncTypeSessionId;
+  final String ncTypeSessionLibelleFr;
+  final String niveauCode;
+  final int niveauId;
+  final String niveauLibelleLongLt;
+  final int nombreNote;
+  final bool notesValide;
+  final int numeroSession;
+  final String offreFormationCode;
+  final int offreFormationId;
+  final String offreFormationLibelleAr;
+  final String offreFormationLibelleFr;
+  final int ouvertureOffreFormationId;
+  final String refCodeEtablissement;
+  final int sessionARemplacerId;
+  final String sessionARemplacerIntitule;
+  final String situationCode;
+  final int situationId;
+  final String situationLibelleAr;
+  final String situationLibelleFr;
+
+  ExamSessionModel({
+    required this.anneeAcademiqueCode,
+    required this.anneeAcademiqueId,
+    required this.avecControle,
+    required this.avecControleContinu,
+    required this.avecControleIntermediaire,
+    required this.codePeriode,
+    required this.coefficient,
+    required this.coefficientNoteEliminatoire,
+    required this.cycleCode,
+    required this.cycleId,
+    required this.cycleLibelleLongLt,
+    required this.dateCloture,
+    required this.dateCreation,
+    required this.dateDebut,
+    required this.dateFin,
+    required this.datePublication,
+    required this.estMigree,
+    required this.id,
+    required this.idPeriode,
+    required this.intitule,
+    required this.libellePeriode,
+    required this.ncTypeSessionCode,
+    required this.ncTypeSessionId,
+    required this.ncTypeSessionLibelleFr,
+    required this.niveauCode,
+    required this.niveauId,
+    required this.niveauLibelleLongLt,
+    required this.nombreNote,
+    required this.notesValide,
+    required this.numeroSession,
+    required this.offreFormationCode,
+    required this.offreFormationId,
+    required this.offreFormationLibelleAr,
+    required this.offreFormationLibelleFr,
+    required this.ouvertureOffreFormationId,
+    required this.refCodeEtablissement,
+    required this.sessionARemplacerId,
+    required this.sessionARemplacerIntitule,
+    required this.situationCode,
+    required this.situationId,
+    required this.situationLibelleAr,
+    required this.situationLibelleFr,
+  });
+
+  factory ExamSessionModel.fromApi(ExamSession session){
+    return ExamSessionModel(
+      anneeAcademiqueCode: session.anneeAcademiqueCode,
+      anneeAcademiqueId: session.anneeAcademiqueId,
+      avecControle: session.avecControle,
+      avecControleContinu: session.avecControleContinu,
+      avecControleIntermediaire: session.avecControleIntermediaire,
+      codePeriode: session.codePeriode,
+      coefficient: session.coefficient,
+      coefficientNoteEliminatoire: session.coefficientNoteEliminatoire,
+      cycleCode: session.cycleCode,
+      cycleId: session.cycleId,
+      cycleLibelleLongLt: session.cycleLibelleLongLt,
+      dateCloture: session.dateCloture,
+      dateCreation: session.dateCreation,
+      dateDebut: session.dateDebut,
+      dateFin: session.dateFin,
+      datePublication: session.datePublication,
+      estMigree: session.estMigree,
+      id: session.id,
+      idPeriode: session.idPeriode,
+      intitule: session.intitule,
+      libellePeriode: session.libellePeriode,
+      ncTypeSessionCode: session.ncTypeSessionCode,
+      ncTypeSessionId: session.ncTypeSessionId,
+      ncTypeSessionLibelleFr: session.ncTypeSessionLibelleFr,
+      niveauCode: session.niveauCode,
+      niveauId: session.niveauId,
+      niveauLibelleLongLt: session.niveauLibelleLongLt,
+      nombreNote: session.nombreNote,
+      notesValide: session.notesValide,
+      numeroSession: session.numeroSession,
+      offreFormationCode: session.offreFormationCode,
+      offreFormationId: session.offreFormationId,
+      offreFormationLibelleAr: session.offreFormationLibelleAr,
+      offreFormationLibelleFr: session.offreFormationLibelleFr,
+      ouvertureOffreFormationId: session.ouvertureOffreFormationId,
+      refCodeEtablissement: session.refCodeEtablissement,
+      sessionARemplacerId: session.sessionARemplacerId,
+      sessionARemplacerIntitule: session.sessionARemplacerIntitule,
+      situationCode: session.situationCode,
+      situationId: session.situationId, situationLibelleAr: session.situationLibelleAr, situationLibelleFr: session.situationLibelleAr,
+      
+  
+
+
+    );
+  }
+}
 
 class ExamsNoteModel {
   final bool absenceJustifie;

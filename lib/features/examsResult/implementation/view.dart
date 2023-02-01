@@ -15,10 +15,10 @@ class ExamsResultView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
-        final status = state.examNotes.stateStatus;
+        final status = state.examNotesState.stateStatus;
 
         if (status == StateStatus.ready) {
-          return _LoadedExamsNotes(examsNotes: state.examNotes.examResults);
+          return _LoadedExamsNotes(examsNotes: state.examNotesState.examResults);
         } else if (status == StateStatus.loading) {
 
             logic.loadData(state);

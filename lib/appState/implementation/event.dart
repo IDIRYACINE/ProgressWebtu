@@ -44,3 +44,8 @@ class UpdateStudentCard extends AppEvent {
 
   UpdateStudentCard(this.response);
 }
+class UpdateExamSessions extends AppEvent {
+  final List<ExamSession> response;
+
+  UpdateExamSessions(this.response);
+}

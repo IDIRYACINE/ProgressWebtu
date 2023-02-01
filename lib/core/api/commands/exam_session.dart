@@ -37,9 +37,8 @@ class ExamSessionsCommand extends Command<ExamSessionsEventData,
         .then((response) {
       try {
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
-        List<ExamSession> examSessions = decodedResponse
-            .map((e) => ExamSession.fromJson(e as Map<String, dynamic>))
-            .toList();
+        List<ExamSession> examSessions = List<ExamSession>.from(decodedResponse
+            .map((e) => ExamSession.fromJson(e as Map<String, dynamic>)));
 
         return ExamSessionsResponse(
             messageId: eventData.messageId, examSessions: examSessions);
@@ -164,7 +163,7 @@ class ExamSession {
   final String dateFin;
   final String datePublication;
   final bool estMigree;
-  final List<ExamSession> examenSessionDtos;
+  final List<dynamic> examenSessionDtos;
   final int id;
   final int idPeriode;
   final String intitule;
@@ -239,55 +238,59 @@ class ExamSession {
 
   factory ExamSession.fromJson(Map<String, dynamic> json) {
     return ExamSession(
-      anneeAcademiqueCode: json[ExamSessionKey.anneeAcademiqueCode.name],
-      anneeAcademiqueId: json[ExamSessionKey.anneeAcademiqueId.name],
-      avecControle: json[ExamSessionKey.avecControle.name],
-      avecControleContinu: json[ExamSessionKey.avecControleContinu.name],
+      anneeAcademiqueCode: json[ExamSessionKey.anneeAcademiqueCode.name] ?? '',
+      anneeAcademiqueId: json[ExamSessionKey.anneeAcademiqueId.name] ?? 0,
+      avecControle: json[ExamSessionKey.avecControle.name] ?? false,
+      avecControleContinu:
+          json[ExamSessionKey.avecControleContinu.name] ?? false,
       avecControleIntermediaire:
-          json[ExamSessionKey.avecControleIntermediaire.name],
-      codePeriode: json[ExamSessionKey.codePeriode.name],
-      coefficient: json[ExamSessionKey.coefficient.name],
+          json[ExamSessionKey.avecControleIntermediaire.name] ?? false,
+      codePeriode: json[ExamSessionKey.codePeriode.name] ?? '',
+      coefficient: (json[ExamSessionKey.coefficient.name] ?? 0).toDouble(),
       coefficientNoteEliminatoire:
-          json[ExamSessionKey.coefficientNoteEliminatoire.name],
-      cycleCode: json[ExamSessionKey.cycleCode.name],
-      cycleId: json[ExamSessionKey.cycleId.name],
-      cycleLibelleLongLt: json[ExamSessionKey.cycleLibelleLongLt.name],
-      dateCloture: json[ExamSessionKey.dateCloture.name],
-      dateCreation: json[ExamSessionKey.dateCreation.name],
-      dateDebut: json[ExamSessionKey.dateDebut.name],
-      dateFin: json[ExamSessionKey.dateFin.name],
-      datePublication: json[ExamSessionKey.datePublication.name],
-      estMigree: json[ExamSessionKey.estMigree.name],
-      examenSessionDtos: json[ExamSessionKey.examenSessionDtos.name],
-      id: json[ExamSessionKey.id.name],
-      idPeriode: json[ExamSessionKey.idPeriode.name],
-      intitule: json[ExamSessionKey.intitule.name],
-      libellePeriode: json[ExamSessionKey.libellePeriode.name],
-      ncTypeSessionCode: json[ExamSessionKey.ncTypeSessionCode.name],
-      ncTypeSessionId: json[ExamSessionKey.ncTypeSessionId.name],
-      ncTypeSessionLibelleFr: json[ExamSessionKey.ncTypeSessionLibelleFr.name],
-      niveauCode: json[ExamSessionKey.niveauCode.name],
-      niveauId: json[ExamSessionKey.niveauId.name],
-      niveauLibelleLongLt: json[ExamSessionKey.niveauLibelleLongLt.name],
-      nombreNote: json[ExamSessionKey.nombreNote.name],
-      notesValide: json[ExamSessionKey.notesValide.name],
-      numeroSession: json[ExamSessionKey.numeroSession.name],
-      offreFormationCode: json[ExamSessionKey.offreFormationCode.name],
-      offreFormationId: json[ExamSessionKey.offreFormationId.name],
+          (json[ExamSessionKey.coefficientNoteEliminatoire.name] ?? 0)
+              .toDouble(),
+      cycleCode: json[ExamSessionKey.cycleCode.name] ?? '',
+      cycleId: json[ExamSessionKey.cycleId.name] ?? 0,
+      cycleLibelleLongLt: json[ExamSessionKey.cycleLibelleLongLt.name] ?? '',
+      dateCloture: json[ExamSessionKey.dateCloture.name] ?? '',
+      dateCreation: json[ExamSessionKey.dateCreation.name] ?? '',
+      dateDebut: json[ExamSessionKey.dateDebut.name] ?? '',
+      dateFin: json[ExamSessionKey.dateFin.name] ?? '',
+      datePublication: json[ExamSessionKey.datePublication.name] ?? '',
+      estMigree: json[ExamSessionKey.estMigree.name] ?? false,
+      examenSessionDtos: [],
+      id: json[ExamSessionKey.id.name] ?? 0,
+      idPeriode: json[ExamSessionKey.idPeriode.name] ?? 0,
+      intitule: json[ExamSessionKey.intitule.name] ?? '',
+      libellePeriode: json[ExamSessionKey.libellePeriode.name] ?? '',
+      ncTypeSessionCode: json[ExamSessionKey.ncTypeSessionCode.name] ?? '',
+      ncTypeSessionId: json[ExamSessionKey.ncTypeSessionId.name] ?? 0,
+      ncTypeSessionLibelleFr:
+          json[ExamSessionKey.ncTypeSessionLibelleFr.name] ?? '',
+      niveauCode: json[ExamSessionKey.niveauCode.name] ?? '',
+      niveauId: json[ExamSessionKey.niveauId.name] ?? '',
+      niveauLibelleLongLt: json[ExamSessionKey.niveauLibelleLongLt.name] ?? '',
+      nombreNote: json[ExamSessionKey.nombreNote.name] ?? 0,
+      notesValide: json[ExamSessionKey.notesValide.name] ?? false,
+      numeroSession: json[ExamSessionKey.numeroSession.name] ?? 0,
+      offreFormationCode: json[ExamSessionKey.offreFormationCode.name] ?? '',
+      offreFormationId: json[ExamSessionKey.offreFormationId.name] ?? 0,
       offreFormationLibelleAr:
-          json[ExamSessionKey.offreFormationLibelleAr.name],
+          json[ExamSessionKey.offreFormationLibelleAr.name] ?? '',
       offreFormationLibelleFr:
-          json[ExamSessionKey.offreFormationLibelleFr.name],
+          json[ExamSessionKey.offreFormationLibelleFr.name] ?? '',
       ouvertureOffreFormationId:
-          json[ExamSessionKey.ouvertureOffreFormationId.name],
-      refCodeEtablissement: json[ExamSessionKey.refCodeEtablissement.name],
-      sessionARemplacerId: json[ExamSessionKey.sessionARemplacerId.name],
+          json[ExamSessionKey.ouvertureOffreFormationId.name] ?? 0,
+      refCodeEtablissement:
+          json[ExamSessionKey.refCodeEtablissement.name] ?? '',
+      sessionARemplacerId: json[ExamSessionKey.sessionARemplacerId.name] ?? 0,
       sessionARemplacerIntitule:
-          json[ExamSessionKey.sessionARemplacerIntitule.name],
-      situationCode: json[ExamSessionKey.situationCode.name],
-      situationId: json[ExamSessionKey.situationId.name],
-      situationLibelleAr: json[ExamSessionKey.situationLibelleAr.name],
-      situationLibelleFr: json[ExamSessionKey.situationLibelleFr.name],
+          json[ExamSessionKey.sessionARemplacerIntitule.name] ?? '',
+      situationCode: json[ExamSessionKey.situationCode.name] ?? '',
+      situationId: json[ExamSessionKey.situationId.name] ?? 0,
+      situationLibelleAr: json[ExamSessionKey.situationLibelleAr.name] ?? '',
+      situationLibelleFr: json[ExamSessionKey.situationLibelleFr.name] ?? '',
     );
   }
 }

@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progresswebtu/appState/state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'logic.dart';
+import '../logic/logic.dart';
+import 'group_section_view.dart';
 
 class GroupsAndSectionsView extends StatelessWidget {
   const GroupsAndSectionsView({super.key});
@@ -22,7 +23,7 @@ class GroupsAndSectionsView extends StatelessWidget {
       body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
         final status = state.sectionsState.stateStatus;
         if (status == StateStatus.ready) {
-          return _LoadedGroupsAndSections(
+          return LoadedGroupsAndSections(
               sections: state.sectionsState.sections);
         } else if (status == StateStatus.loading) {
           final studentId = state.studentCardState.studentCardSections.first.id.toString();
@@ -33,36 +34,6 @@ class GroupsAndSectionsView extends StatelessWidget {
           return Center(child: Text(localizations.couldNotLoadData));
         }
       }),
-    );
-  }
-}
-
-class _LoadedGroupsAndSections extends StatelessWidget {
-  final List<SectionModel> sections;
-
-  const _LoadedGroupsAndSections({required this.sections});
-
-  Widget buildSection(BuildContext context, int index) {
-    final section = sections[index];
-
-    return Card(
-      
-      child: Column(children: [
-        Text(section.nomSection),
-        Text(section.periodeLibelleLongLt),
-        Text(section.dateAffectation),
-        Text(section.nomGroupePedagogique),
-        Text(section.groupePedagogiqueId.toString()),
-      ],),
-    );
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: sections.length,
-      itemBuilder: buildSection,
     );
   }
 }

@@ -8,9 +8,9 @@ import 'package:progresswebtu/core/splash/feature.dart';
 import 'package:progresswebtu/core/splash/implementation/not_done_view.dart';
 import 'package:progresswebtu/features/bac/feature.dart';
 import 'package:progresswebtu/features/bilans/feature.dart';
-import 'package:progresswebtu/features/examsPlaning/implementation/view.dart';
-import 'package:progresswebtu/features/examsResult/implementation/view.dart';
-import 'package:progresswebtu/features/groupsAndSections/implementation/view.dart';
+import 'package:progresswebtu/features/examsPlaning/ui/view.dart';
+import 'package:progresswebtu/features/examsResult/ui/view.dart';
+import 'package:progresswebtu/features/groupsAndSections/ui/view.dart';
 import 'package:progresswebtu/features/studentCard/feature.dart';
 import 'routes.dart';
 

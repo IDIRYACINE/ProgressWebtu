@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 
 abstract class AppThemes {
 
-  static final lightTheme = ThemeData(
-    primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: Colors.grey,
-    backgroundColor: Colors.white,
-  );
+  static final lightTheme = ThemeData.from(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue));
 
   
 }

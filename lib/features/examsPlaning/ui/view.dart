@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progresswebtu/appState/state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'logic.dart';
+import 'package:progresswebtu/features/examsPlaning/ui/session_widget.dart';
+import '../logic/logic.dart';
 
 class ExamsPlanningsView extends StatefulWidget {
   const ExamsPlanningsView({super.key});
@@ -21,7 +22,7 @@ class ExamsPlanningsViewState extends State<ExamsPlanningsView> {
       body: BlocBuilder<AppBloc, AppState>(builder: (context, state) {
         final status = state.examSessionsState.stateStatus;
         if (status == StateStatus.ready) {
-          return _LoadedExamsSessions(
+          return LoadedExamsSessions(
               sessions: state.examSessionsState.examSessions);
         } else if (status == StateStatus.loading) {
           final latestStudentCardSection = state.studentCardState.studentCardSections.first;
@@ -41,32 +42,3 @@ class ExamsPlanningsViewState extends State<ExamsPlanningsView> {
   }
 }
 
-class _LoadedExamsSessions extends StatelessWidget {
-  const _LoadedExamsSessions({required this.sessions});
-
-  final List<ExamSessionModel> sessions;
-
-  Widget buildSessionWidget(ExamSessionModel session) {
-    return Card(
-        child: Column(
-      children: [
-        Text(session.anneeAcademiqueCode),
-        Text(session.intitule),
-        Text(session.codePeriode),
-        Text(session.dateDebut),
-        Text(session.dateFin),
-        Text(session.datePublication),
-      ],
-    ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Column(
-      children: [
-        for (ExamSessionModel session in sessions) buildSessionWidget(session)
-      ],
-    );
-  }
-}

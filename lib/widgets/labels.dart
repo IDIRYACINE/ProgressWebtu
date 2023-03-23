@@ -23,7 +23,7 @@ class InformationLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final style = textStyle ?? Theme.of(context).textTheme.headline6;
+    final style = textStyle ?? Theme.of(context).textTheme.labelMedium;
 
     return Card(
       child: Row(

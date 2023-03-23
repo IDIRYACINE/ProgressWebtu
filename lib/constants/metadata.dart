@@ -7,4 +7,6 @@ abstract class AppMetadata{
   static const passwordSharedPrefKey = 'password';
   static const authTokenSharedPrefKey = 'authToken';
   static const authTokenExpirationSharedPrefKey = 'expirationDate';
+
+  static const maxExamResult = 20;
 }

@@ -23,11 +23,12 @@ class InformationLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final style = textStyle ?? Theme.of(context).textTheme.labelMedium;
+    final style = textStyle ?? Theme.of(context).textTheme.labelLarge;
 
     return Card(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  
         children: [
           Text(title, style: style),
           Text(text, style: style),

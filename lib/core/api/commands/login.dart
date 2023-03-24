@@ -29,8 +29,6 @@ class LoginCommand
       LoginRequestKeys.password.name: eventData.password
     };
 
-    _headers.putIfAbsent("Content-Type" , () => "application/json");
-
     return ApiService.instance()
         .client
         .post(url, body: jsonEncode(body), headers: _headers)

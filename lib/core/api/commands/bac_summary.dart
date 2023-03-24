@@ -34,6 +34,7 @@ class BacSummaryCommand extends Command<BacSummaryEventData,
         .get(url, headers: _headers)
         .then((response) {
       try {
+
         final decodedResponse =
             jsonDecode(response.body) as Map<String, dynamic>;
         BacSummary bacSummary = BacSummary.fromJson(decodedResponse);

@@ -8,16 +8,15 @@ const serviceId = 0;
 class ApiService extends Service {
   static ApiService? _instance;
   final http.Client client = http.Client();
-  final bool isTestMode;
 
-  ApiService._internal(this.isTestMode, super.searchAlgorithm);
+  ApiService._internal( super.searchAlgorithm);
 
-  factory ApiService.instance([bool isTestMode = false]) {
+  factory ApiService.instance() {
     if (_instance == null) {
       BinarySearchAlgorithm<Command, int> searchAlgorithm =
           _createSearchAlgorithm();
 
-      _instance = ApiService._internal(isTestMode, searchAlgorithm);
+      _instance = ApiService._internal( searchAlgorithm);
       _instance!._registerDefaultCommands();
     }
 
@@ -44,25 +43,26 @@ class ApiService extends Service {
     );
 
     final postmanTestHeader = {postmanApiHeader: postmanApiKey};
+    final utf8Header = {contentTypeHeader: utf8ContentType};
 
-    replaceCommandAtIndex(LoginCommand(isTestMode ? postmanTestHeader : {}));
-    replaceCommandAtIndex(BacNotesCommand(isTestMode ? postmanTestHeader : {}));
+    replaceCommandAtIndex(LoginCommand(isTestMode ? postmanTestHeader : utf8Header));
+    replaceCommandAtIndex(BacNotesCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        BacSummaryCommand(isTestMode ? postmanTestHeader : {}));
+        BacSummaryCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        ExamNotesCommand(isTestMode ? postmanTestHeader : {}));
+        ExamNotesCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        CurrentAcademicYearCommand(isTestMode ? postmanTestHeader : {}));
+        CurrentAcademicYearCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        StudentCardCommand(isTestMode ? postmanTestHeader : {}));
+        StudentCardCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        ExamSessionsCommand(isTestMode ? postmanTestHeader : {}));
+        ExamSessionsCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        SemestreSummaryCommand(isTestMode ? postmanTestHeader : {}));
+        SemestreSummaryCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        AllSessionsBilansCommand(isTestMode ? postmanTestHeader : {}));
+        AllSessionsBilansCommand(isTestMode ? postmanTestHeader : utf8Header));
     replaceCommandAtIndex(
-        SectionsAndGroupsCommand(isTestMode ? postmanTestHeader : {}));
+        SectionsAndGroupsCommand(isTestMode ? postmanTestHeader : utf8Header));
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progresswebtu/appState/state.dart';
+import 'package:progresswebtu/constants/measures.dart';
 
 import 'logic.dart';
 
@@ -43,26 +44,47 @@ class _LoadedStudentCard extends StatelessWidget {
   Widget itemBuilder(BuildContext context, int index) {
     final studentCardSection = studentCardSections[index];
     return Card(child: 
-    Column(
-      children: [
-        Text(studentCardSection.anneeAcademiqueCode),
-        Text(studentCardSection.ofLlSpecialite),
-        Text(studentCardSection.ofLlSpecialiteArabe),
-                Text(studentCardSection.ofLlFiliere),
-        Text(studentCardSection.ofLlFiliereArabe),
-        Text(studentCardSection.refLibelleCycle),
-        Text(studentCardSection.refLibelleCycleAr),
-        Text(studentCardSection.niveauLibelleLongAr),
-        Text(studentCardSection.niveauLibelleLongLt),
-        Text(studentCardSection.llEtablissementArabe),
-        Text(studentCardSection.llEtablissementLatin),
-      ],
+    Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          _Label(studentCardSection.anneeAcademiqueCode),
+          _Label(studentCardSection.ofLlSpecialite),
+          _Label(studentCardSection.ofLlSpecialiteArabe),
+                  _Label(studentCardSection.ofLlFiliere),
+          _Label(studentCardSection.ofLlFiliereArabe),
+          _Label(studentCardSection.refLibelleCycle),
+          _Label(studentCardSection.refLibelleCycleAr),
+          _Label(studentCardSection.niveauLibelleLongAr),
+          _Label(studentCardSection.niveauLibelleLongLt),
+          _Label(studentCardSection.llEtablissementArabe),
+          _Label(studentCardSection.llEtablissementLatin),
+        ],
+      ),
     ),);
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemBuilder: itemBuilder, itemCount: studentCardSections.length);
+    return Padding(
+      padding: const EdgeInsets.all(AppMeasures.bodyPaddingsMeduim),
+      child: ListView.builder(
+          itemBuilder: itemBuilder, itemCount: studentCardSections.length),
+    );
+  }
+}
+
+
+class _Label extends StatelessWidget {
+  final String value;
+
+  const _Label(this.value, );
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Text(
+      value,
+      style: theme.textTheme.bodyLarge );
   }
 }

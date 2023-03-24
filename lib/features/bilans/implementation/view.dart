@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progresswebtu/appState/state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:progresswebtu/constants/measures.dart';
 import 'logic.dart';
 
 class BilansView extends StatefulWidget {
@@ -62,7 +63,10 @@ class _LoadedBilans extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return ListView.builder(
-        itemBuilder: buildBilanWidget, itemCount: bilans.length);
+    return Padding(
+      padding: const EdgeInsets.all(AppMeasures.bodyPaddingsMeduim),
+      child: ListView.builder(
+          itemBuilder: buildBilanWidget, itemCount: bilans.length),
+    );
   }
 }

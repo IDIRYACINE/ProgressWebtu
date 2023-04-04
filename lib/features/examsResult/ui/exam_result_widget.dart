@@ -15,29 +15,32 @@ class LoadedExamsNotes extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
-    
       child: SizedBox(
         height: AppMeasures.examCardHeight,
         child: Padding(
           padding: const EdgeInsets.all(AppMeasures.examCardPadding),
           child: Row(
-            
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("${examNote.examNote} / ${AppMetadata.maxExamResult}",style: theme.textTheme.displaySmall,),
-                  Text(examNote.mcLibelleFr,style: theme.textTheme.labelSmall),
-                ],
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      "${examNote.examNote} / ${AppMetadata.maxExamResult}",
+                      style: theme.textTheme.displaySmall,
+                    ),
+                    Text(examNote.mcLibelleFr, style: theme.textTheme.labelSmall),
+                  ],
+                ),
               ),
               SizedBox(
-                height: AppMeasures.examCardProgressHeight,
-                width: AppMeasures.examCardProgressWidth,
-                child: CircularProgressIndicator(
-                  backgroundColor: theme.colorScheme.secondary,
-                  value:examResultToCircularProgress(examNote.examNote)))
+                  height: AppMeasures.examCardProgressHeight,
+                  width: AppMeasures.examCardProgressWidth,
+                  child: CircularProgressIndicator(
+                      backgroundColor: theme.colorScheme.secondary,
+                      value: examResultToCircularProgress(examNote.examNote)))
             ],
           ),
         ),

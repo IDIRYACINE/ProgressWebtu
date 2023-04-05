@@ -184,5 +184,8 @@
     "refCodePeriode": "مرجع كود الفترة",
     "refCodePeriodicite": "مرجع كود التدويرية",
     "studentCard": "بطاقة الطالب",
-    "bilans": "التقارير السنوية"
+    "bilans": "التقارير السنوية",
+    "moyenne": "متوسط",
+    "examNote": "درجة الامتحان",
+    "controlContinu": "التحكم المستمر"
 }

@@ -183,5 +183,8 @@
     "refCodePeriode": "Period Code Reference",
     "refCodePeriodicite": "Periodicity Code Reference",
     "studentCard": "Student Card",
-    "bilans": "Bilans"
+    "bilans": "Bilans",
+    "moyenne": "Final Note",
+    "examNote": "Exam Note",
+    "controlContinu": "Continuous Control"
 }

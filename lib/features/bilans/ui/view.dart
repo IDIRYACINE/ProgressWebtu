@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:progresswebtu/appState/state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progresswebtu/constants/measures.dart';
-import 'logic.dart';
+import 'package:progresswebtu/widgets/buttons.dart';
+import '../logic/logic.dart';
+import 'bilan_view.dart';
 
 class BilansView extends StatefulWidget {
   const BilansView({super.key});
@@ -24,9 +26,7 @@ class BilansViewState extends State<BilansView> {
         if (status == StateStatus.ready) {
           return _LoadedBilans(bilans: state.bilansState.bilans);
         } else if (status == StateStatus.loading) {
-          final authState =
-              state.authState;
-
+          final authState = state.authState;
 
           logic.loadBilans(authState.userName, authState.token);
 
@@ -40,33 +40,50 @@ class BilansViewState extends State<BilansView> {
   }
 }
 
-class _LoadedBilans extends StatelessWidget {
+class _LoadedBilans extends StatefulWidget {
   const _LoadedBilans({required this.bilans});
 
   final List<SessionBilanModel> bilans;
 
-  Widget buildBilanWidget(BuildContext context, int index) {
-    final bilan = bilans[index];
+  @override
+  State<_LoadedBilans> createState() => _LoadedBilansState();
+}
 
-    return Card(
-        child: Column(
-      children: [
-        Text(bilan.niveauLibelleLongLt),
-        Text(bilan.moyenne.toString()),
-        Text(bilan.credit.toString()),
-        Text(bilan.niveauCode),
-        
-      ],
-    ));
+class _LoadedBilansState extends State<_LoadedBilans> {
+  int selectedIndex = 0;
+
+  List<String> _getBilansTitles() {
+    List<String> titles = [];
+    for (SessionBilanModel bilan in widget.bilans) {
+      titles.add("${bilan.niveauCode} ${bilan.periodeLibelleFr}");
+    }
+
+    return titles;
+  }
+
+  void _onIndexChanged(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: const EdgeInsets.all(AppMeasures.bodyPaddingsMeduim),
-      child: ListView.builder(
-          itemBuilder: buildBilanWidget, itemCount: bilans.length),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          TabSwitcherButton(
+            tabTitles: _getBilansTitles(),
+            onIndexChanged: _onIndexChanged,
+          ),
+          Expanded(
+              child: BilanView(
+            bilan: widget.bilans[selectedIndex],
+          )),
+        ],
+      ),
     );
   }
 }

@@ -51,8 +51,8 @@ class InformationLabel extends StatelessWidget {
   }
 }
 
-class Title extends StatelessWidget {
-  const Title(
+class TextTitle extends StatelessWidget {
+  const TextTitle(
       {super.key,
       required this.title,
       this.isBold = false,

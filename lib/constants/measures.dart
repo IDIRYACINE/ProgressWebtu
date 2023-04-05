@@ -15,4 +15,10 @@ abstract class AppMeasures{
   static const  examCardHeight = 150.0;
 
   static const groupCardHeight = 150.0;
+
+  static const cardDividerHeight = 10.0;
+
+  static const ueCardMaxHeight = 500.0;
+
+  static const cardDividerThickness = 1.0;
 }

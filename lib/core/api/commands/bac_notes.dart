@@ -27,7 +27,7 @@ class BacNotesCommand
 
     Uri url = Uri.https(host, apiUrl);
 
-    _headers.putIfAbsent("authorization", () => eventData.authKey);
+    _headers.putIfAbsent("Authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client

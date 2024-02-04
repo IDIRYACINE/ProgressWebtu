@@ -8,7 +8,7 @@
 PRODUCT_NAME = progresswebtu
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.progresswebtu
+PRODUCT_BUNDLE_IDENTIFIER = com.idir.progresswebtu
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.idir. All rights reserved.

@@ -21,18 +21,20 @@ class SectionsAndGroupsCommand
   Future<SectionsResponse> handleRawEvent(SectionsRawEventData eventData) {
     Api api = SectionsAndGroupsApi();
 
+    print("before replace: ${api.url}");
     String apiUrl = api.url.replaceAll(studentIdToken, eventData.studentId);
     apiUrl = apiUrl.replaceAll(bacYearToken, eventData.studentId);
-
+    print("after replace: $apiUrl");
     Uri url = Uri.https(host, apiUrl);
 
-    _headers.putIfAbsent("authorization", () => eventData.authKey);
+    _headers.putIfAbsent("Authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
         .get(url, headers: _headers)
         .then((response) {
       try {
+        print("response: ${response.body}");
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
         List<Section> sections = decodedResponse
             .map((e) => Section.fromJson(e as Map<String, dynamic>))

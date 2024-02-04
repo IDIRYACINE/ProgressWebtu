@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:progresswebtu/core/api/feature.dart';
 import 'package:progresswebtu/utility/serviceStore/service.dart';
 
@@ -23,18 +22,20 @@ class StudentCardCommand extends Command<StudentCardEventData,
       StudentCardRawEventData eventData) {
     Api api = StudentCardApi();
 
-    String apiUrl = api.url.replaceAll(usernameToken, eventData.username);
+    print("before ${api.url}");
+    String apiUrl = api.url.replaceAll(bacIdToken, eventData.username);
     apiUrl = apiUrl.replaceAll(bacYearToken, eventData.bacYear);
-
+    print("after ${apiUrl}");
     Uri url = Uri.https(host, apiUrl);
-
-    _headers.putIfAbsent("authorization", () => eventData.authKey);
+    print(eventData.authKey);
+    _headers.putIfAbsent("Authorization", () => eventData.authKey);
 
     return ApiService.instance()
         .client
         .get(url, headers: _headers)
         .then((response) {
       try {
+        print(response.body);
         final decodedResponse = jsonDecode(response.body) as List<dynamic>;
         List<StudentCardSection> studentCardSections = decodedResponse
             .map((e) => StudentCardSection.fromJson(e as Map<String, dynamic>))
@@ -43,6 +44,8 @@ class StudentCardCommand extends Command<StudentCardEventData,
         return StudentCardResponse(
             messageId: eventData.messageId, studentCard: studentCardSections);
       } catch (e) {
+        print("error");
+        print(e);
         return StudentCardResponse(
             status: ServiceEventResponseStatus.error,
             messageId: eventData.messageId);

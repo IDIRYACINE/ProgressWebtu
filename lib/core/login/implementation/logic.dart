@@ -111,7 +111,7 @@ class LoginLogic {
 
   Future<void> _loadStudentCard(
       String username, String bacYear, String authToken) async {
-        AppNavigator.displayDialog(buildLoadingDialog());
+    AppNavigator.displayDialog(buildLoadingDialog());
     final data = StudentCardEventData(
         authKey: authToken,
         requesterId: id,
@@ -120,16 +120,15 @@ class LoginLogic {
 
     final event = StudentCardEvent(eventData: data);
 
-    ApiService.instance()
-        .onEventForResponse(event)
-        .then((response ) => _updateStudentCardState(response as StudentCardResponse));
+    ApiService.instance().onEventForResponse(event).then(
+        (response) => _updateStudentCardState(response as StudentCardResponse));
   }
 
   void _updateStudentCardState(StudentCardResponse response) {
+  
     final event = bloc.UpdateStudentCard(response.studentCard!);
 
     BlocProvider.of<bloc.AppBloc>(formKey.currentContext!).add(event);
-
 
     AppNavigator.pushNamedReplacement(dashboardRoute);
   }

@@ -3,7 +3,7 @@
 
 # Migrated
 
-Migrated the project to a kotlin implementation at [NewRepository]([https://github.com/abdallahmehiz/ProgresWebtu](https://github.com/abdallahmehiz/progres)
+Migrated the project to a kotlin implementation at [NewRepository]([https://github.com/abdallahmehiz/ProgresWebtu](https://github.com/abdallahmehiz/progres))
 
 
 ![1](./preview/1.jpg)
